@@ -2,7 +2,13 @@
 
 #### Installation
 
-Copy the .ini files in this directory into the game's Config/WindowsNoEditor directory
+1. Find your game's Config/WindowsNoEditor directory
+
+1. For each .ini file in this directory, copy the contents into your game's configuration files after any existing content
+
+   ⚠️ Avoid overwriting any essential configuration, such as the `[Core.System]` section in your game's Engine.ini file
+
+1. Go through the configs and tweak any values as desired
 
 #### Testing
 
