@@ -10,13 +10,13 @@
 
 1. Go through the configs and tweak any values as desired
 
-#### Testing
+1. If desired, you can tweak individual settings through the UE4 console ( see below)
 
-1. Install a game that uses Unreal Engine 4
-
-   [https://en.wikipedia.org/wiki/List_of_Unreal_Engine_games#Unreal_Engine_4](https://en.wikipedia.org/wiki/List_of_Unreal_Engine_games#Unreal_Engine_4)
+#### Changing configuration via the UE4 console
 
 1. Use the [Universal Unreal Engine 4 Unlocker](https://framedsc.github.io/GeneralGuides/universal_ue4_consoleunlocker.htm) to unlock the console for the game
+
+   ⚠️ This will probably not work for games installed via the Microsoft Store or Xbox Game Pass
 
 1. Press <kbd>~</kbd> to open the console in the game
 
@@ -39,3 +39,11 @@
      ```
      r.ShadowQuality 1
      ```
+
+#### Testing
+
+1. Install one of the UE4 demos: [Unreal Engine 4 - Five Tech Demos](https://www.techpowerup.com/download/unreal-engine-4-five-tech-demos/)
+
+   or install a game that uses Unreal Engine 4: [https://en.wikipedia.org/wiki/List_of_Unreal_Engine_games#Unreal_Engine_4](https://en.wikipedia.org/wiki/List_of_Unreal_Engine_games#Unreal_Engine_4)
+
+1. Use the UE4 console to tweak settings while the game is running (see above) in order to optimize these configs
