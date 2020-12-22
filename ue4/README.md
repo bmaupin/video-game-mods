@@ -47,3 +47,5 @@
    or install a game that uses Unreal Engine 4: [https://en.wikipedia.org/wiki/List_of_Unreal_Engine_games#Unreal_Engine_4](https://en.wikipedia.org/wiki/List_of_Unreal_Engine_games#Unreal_Engine_4)
 
 1. Use the UE4 console to tweak settings while the game is running (see above) in order to optimize these configs
+
+   All UE4 console variables can be seen here: [https://digilander.libero.it/ZioYuri78/](https://digilander.libero.it/ZioYuri78/)
