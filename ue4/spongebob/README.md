@@ -6,9 +6,9 @@
 
 1. Open the following file in an editor:
 
-- Proton: ~/.steam/steam/steamapps/compatdata/969990/pfx/drive_c/users/steamuser/AppData/Local/Pineapple/Saved/Config/WindowsNoEditor/Engine.ini
+   - Proton: `~/.steam/steam/steamapps/compatdata/969990/pfx/drive_c/users/steamuser/AppData/Local/Pineapple/Saved/Config/WindowsNoEditor/Engine.ini`
 
-- Windows: C:/users/(user)/AppData/Local/Pineapple/Saved/Config/WindowsNoEditor/Engine.ini
+   - Windows: `C:/users/(user)/AppData/Local/Pineapple/Saved/Config/WindowsNoEditor/Engine.ini`
 
 1. Copy the contents of the `Engine.ini` file in this directory at the end of the file (replace any existing `[SystemSettings]`)
 
