@@ -1,5 +1,7 @@
 # Unreal Engine 4
 
+**ⓘ Note** after extensive testing, in most cases this does very little to improve performance. UE4 is very demanding and simply doesn't run well on potato PCs. Changing the `sg` values are the only ones that have any meaningful impact, and these values are normally already changeable from the game UI anyway.
+
 #### Installation
 
 1. Find your game's Config/WindowsNoEditor directory

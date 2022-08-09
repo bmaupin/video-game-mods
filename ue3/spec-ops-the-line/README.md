@@ -1,3 +1,5 @@
+# Spec Ops: The Line
+
 #### Changing configs with the Windows build
 
 1. Download inicrypt.zip
