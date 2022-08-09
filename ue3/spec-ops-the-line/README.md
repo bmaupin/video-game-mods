@@ -2,38 +2,60 @@
 
 #### Changing configs with the Windows build
 
+(The Linux build seems to hang on Chapter 5, so using Proton is recommended)
+
 1. Download inicrypt.zip
 
    https://community.pcgamingwiki.com/files/file/1880-spec-ops-the-line-ini-decryptencrypt-tools-inicryptzip/
 
 1. Extract inicrypt.zip
 
+   ```
    unzip inicrypt.zip
+   ```
 
-cd ~/.steam/steam/steamapps/compatdata/50300/pfx/drive_c/users/steamuser/Documents/My\ Games/SpecOps-TheLine/SRGame/Config/
+1. Make changes to SREngine.ini to disable motion blur
 
-wine ~/Desktop/Gibbed.SpecOpsTheLine.IniDecrypt.exe SREngine.ini
+   1. Decrypt the file
 
-## < MotionBlur=True
+      ```
+      cd ~/.steam/steam/steamapps/compatdata/50300/pfx/drive_c/users/steamuser/Documents/My\ Games/SpecOps-TheLine/SRGame/Config/
 
-> MotionBlur=False
-> 1915c1915
+      wine ~/Desktop/Gibbed.SpecOpsTheLine.IniDecrypt.exe SREngine.ini
+      ```
 
-## < UseHighQualityBloom=True
+   1. Change `MotionBlur=True` to `MotionBlur=False`
 
-> UseHighQualityBloom=False
+   1. Change `UseHighQualityBloom=True` to `UseHighQualityBloom=False`
 
-wine ~/Desktop/Gibbed.SpecOpsTheLine.IniEncrypt.exe SREngine.ini
+   1. Encrypt the file
 
-wine ~/Desktop/Gibbed.SpecOpsTheLine.IniDecrypt.exe SRInput.ini
+      ```
+      wine ~/Desktop/Gibbed.SpecOpsTheLine.IniEncrypt.exe SREngine.ini
+      ```
 
-## < bEnableMouseSmoothing=true
+1. Make changes to SRInput.ini to disable mouse acceleration
 
-> bEnableMouseSmoothing=false
-> 619c619
+   1. Decrypt the file
 
-## < m_viewAccelEnabled=true
+      ```
+      wine ~/Desktop/Gibbed.SpecOpsTheLine.IniDecrypt.exe SRInput.ini
+      ```
 
-> m_viewAccelEnabled=false
+   1. Change `bEnableMouseSmoothing=true` to `bEnableMouseSmoothing=false`
 
-wine ~/Desktop/Gibbed.SpecOpsTheLine.IniEncrypt.exe SRInput.ini
+   1. Change `m_viewAccelEnabled=true` to `m_viewAccelEnabled=false`
+
+   1. Encrypt the file
+
+      ```
+      wine ~/Desktop/Gibbed.SpecOpsTheLine.IniEncrypt.exe SRInput.ini
+      ```
+
+#### Disable intro videos
+
+Change Steam [Launch Options](https://help.steampowered.com/faqs/view/7D01-D2DD-D75E-2955) to
+
+```
+%command% -nosplash -nostartupmovies
+```
