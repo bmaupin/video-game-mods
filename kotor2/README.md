@@ -10,7 +10,11 @@ Mod to make it more family-friendly
 
 - KOTOR 2 TSLRCM
 
-  Copy tslrcm/appearance.2da to steam/SteamApps/workshop/content/208580/485537937/override/
+  Copy tslrcm/appearance.2da to steam/SteamApps/workshop/content/208580/485537937/override/, e.g. for Proton:
+
+  ```
+  cp kotor2/tslrcm/appearance.2da ~/.steam/steam/steamapps/workshop/content/208580/485537937/override/
+  ```
 
 #### Removal
 
