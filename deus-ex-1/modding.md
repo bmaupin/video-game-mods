@@ -1,26 +1,54 @@
 # Modding Deus Ex 1
 
+ⓘ These docs are for very basic mods where a property is changed in an Unreal package file to point to a different object, e.g. for changing a texture, sound, etc.
+
 #### Identifying textures
 
-1. Download [UE Viewer](https://www.gildor.org/en/projects/umodel)
+- UE Viewer
 
-   ⓘ The Linux version relies on a very old version of libpng, but the Windows version works fine in Wine
+  UE Viewer can be used to quickly browse all textures in a package
 
-1. Open UE Viewer, e.g.
+  1. Download [UE Viewer](https://www.gildor.org/en/projects/umodel)
 
-   ```
-   wine umodel.exe
-   ```
+     ⓘ The Linux version relies on a very old version of libpng, but the Windows version works fine in Wine
 
-1. Browse to the Deus Ex/System directory
+  1. Open UE Viewer, e.g.
 
-   e.g. Z:\home\user\.steam\steam\steamapps\common\Deus Ex\System\
+     ```
+     wine umodel.exe
+     ```
 
-1. Click _OK_ and then open DeusExCharacters.u
+  1. Browse to the Deus Ex/System directory
 
-1. Browse the textures using PgUp/PgDn
+     e.g. Z:\home\user\.steam\steam\steamapps\common\Deus Ex\System\
+
+  1. Click _OK_ and then open DeusExCharacters.u
+
+  1. Browse the textures using PgUp/PgDn
+
+- [UTPT](https://www.acordero.org/projects/unreal-tournament-package-tool/) (Unreal Tournament Package Tool)
+
+  1. Download [UTPT](https://www.acordero.org/projects/unreal-tournament-package-tool/) (Unreal Tournament Package Tool)
+
+  1. Open UTPT, e.g.
+
+     ```
+     wine UTPT.exe
+     ```
+
+  1. Open Deus Ex/System/DeusExCharacters.u
+
+  1. In the _Export Tree_ pane on the left, scroll down to the _Skins_ package
+
+  1. Find the skin whose texture you'd like to see, right-click > _View Texture_
 
 #### Change a texture used by a model
+
+1. Make a copy of DeusEx.u
+
+   ```
+   cp -av DeusEx.u DeusEx.u.bak
+   ```
 
 1. Download [UTPT](https://www.acordero.org/projects/unreal-tournament-package-tool/) (Unreal Tournament Package Tool)
 
@@ -85,3 +113,20 @@
       e.g. replace E4 12 at 0x000525c6 with D9 0C
 
    1. Save the file
+
+#### Generate binary patch
+
+ⓘ This method uses `xxd` to generate the binary patches as plain text files, which are much slower to generate but they are still quick to apply, they can be commented, and because they're plain text files they work well with version control
+
+```
+comm -13 <(xxd -c1 DeusEx.u.bak) <(xxd -c1 DeusEx.u) > DeusEx.u.patch
+```
+
+- `xxd -c1` dumps the files into hexadecimal text values, one byte per line
+- `comm -13` shows only the lines in the second file that differ from the first file
+
+To apply the binary patch:
+
+```
+xxd -c1 -r DeusEx.u.patch DeusEx.u
+```
