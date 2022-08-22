@@ -92,41 +92,54 @@
 
    e.g. TrenchShirtTex1 = `-793` = `D9 0C`
 
-1. Change the texture
+#### Create patch
 
-   1. Open DeusEx.u with a hex editor
+ⓘ Since plain text files are easier to work with, this method uses plain text patch files, which is possible because we're working with small files and the length of the files isn't being changed.
+
+- Create a patch file manually
+
+  Patch files are pretty straightforward, each line has an address, byte, and optional comment, e.g.
+
+  ```
+  0047b087: ed # BumFemale BumFemaleTex1 -> JunkieMaleTex1
+  0047b088: 12
+  ```
+
+- Or, edit the file with a hex editor and create the patch file using `xxd`:
+
+  1.  Edit the file with a hex editor
+
+      1. Open DeusEx.u with a hex editor
+
+         ```
+         ghex ~/.steam/steam/steamapps/common/Deus\ Ex/System/DeusEx.u
+         ```
+
+      1. Go to the byte offset
+
+         e.g. for ghex use _Edit_ > _Goto Byte_
+
+      1. Make sure the value of the property matches what you found earlier
+
+      1. Replace the value of the old texture with the value of the new texture
+
+         In ghex, you can type directly into the main window to edit the file
+
+         e.g. replace E4 12 at 0x000525c6 with D9 0C
+
+      1. Save the file
+
+  1.  Generate the patch
 
       ```
-      ghex ~/.steam/steam/steamapps/common/Deus\ Ex/System/DeusEx.u
+      comm -13 <(xxd -c1 DeusEx.u.bak) <(xxd -c1 DeusEx.u) > DeusEx.u.patch
       ```
 
-   1. Go to the byte offset
+      - `xxd -c1` dumps the files into hexadecimal text values, one byte per line
+      - `comm -13` shows only the lines in the second file that differ from the first file
 
-      e.g. for ghex use _Edit_ > _Goto Byte_
-
-   1. Make sure the value of the property matches what you found earlier
-
-   1. Replace the value of the old texture with the value of the new texture
-
-      In ghex, you can type directly into the main window to edit the file
-
-      e.g. replace E4 12 at 0x000525c6 with D9 0C
-
-   1. Save the file
-
-#### Generate binary patch
-
-ⓘ This method uses `xxd` to generate the binary patches as plain text files, which are much slower to generate but they are still quick to apply, they can be commented, and because they're plain text files they work well with version control
+To apply the patch:
 
 ```
-comm -13 <(xxd -c1 DeusEx.u.bak) <(xxd -c1 DeusEx.u) > DeusEx.u.patch
-```
-
-- `xxd -c1` dumps the files into hexadecimal text values, one byte per line
-- `comm -13` shows only the lines in the second file that differ from the first file
-
-To apply the binary patch:
-
-```
-xxd -c1 -r DeusEx.u.patch DeusEx.u
+xxd -c1 -r DeusEx.u.patch ~/.steam/steam/steamapps/common/Deus\ Ex/System/DeusEx.u
 ```
