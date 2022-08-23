@@ -98,7 +98,9 @@ const patchMipMap = (
         currentColumn < maskStartX ||
         currentColumn > maskEndX
       ) {
-        writeByte(arrayBuffer, currentByte, [0x01]);
+        // Swap the colour for a darker one in the colour palette
+        // Colours start at 0x01; for most textures 0x01 is black and they get gradually lighter/more colourful
+        writeByte(arrayBuffer, currentByte, [0x02]);
       }
     }
   }
