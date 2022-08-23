@@ -21,27 +21,27 @@ const main = async () => {
 
 const patchDeusExCharacters = (arrayBuffer: ArrayBuffer) => {
   // BumFemaleTex1
-  patchMipMaps(arrayBuffer, 0x006b5197, 83, 166, 81);
+  patchMipMaps(arrayBuffer, 0x006b5197, 83, 81, 166);
 
   // Hooker1Tex3
-  patchMipMaps(arrayBuffer, 0x003e0dbe, 83, 166, 81);
+  patchMipMaps(arrayBuffer, 0x003e0dbe, 83, 81, 166);
 
   // Hooker2Tex3
-  patchMipMaps(arrayBuffer, 0x004113bc, 83, 166, 94);
+  patchMipMaps(arrayBuffer, 0x004113bc, 83, 94, 166);
 
   // JunkieFemaleTex1
-  patchMipMaps(arrayBuffer, 0x004316d0, 83, 166, 81);
+  patchMipMaps(arrayBuffer, 0x004316d0, 83, 81, 166);
 
   // SandraRentonTex1
-  patchMipMaps(arrayBuffer, 0x00426b58, 83, 166, 81);
+  patchMipMaps(arrayBuffer, 0x00426b58, 83, 81, 166);
 };
 
 const patchMipMaps = (
   arrayBuffer: ArrayBuffer,
   startingByte: number,
   maskStartX: number,
-  maskEndX: number,
-  maskStartY: number
+  maskStartY: number,
+  maskEndX: number
 ) => {
   // Size of the first texture mipmap
   let xLength = 256;
@@ -55,8 +55,8 @@ const patchMipMaps = (
       xLength,
       yLength,
       maskStartX,
-      maskEndX,
-      maskStartY
+      maskStartY,
+      maskEndX
     );
 
     startingByte =
@@ -86,8 +86,8 @@ const patchMipMap = (
   xLength: number,
   yLength: number,
   maskStartX: number,
-  maskEndX: number,
-  maskStartY: number
+  maskStartY: number,
+  maskEndX: number
 ) => {
   for (let currentRow = 0; currentRow < yLength; currentRow++) {
     for (let currentColumn = 0; currentColumn < xLength; currentColumn++) {
