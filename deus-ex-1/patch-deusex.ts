@@ -20,128 +20,47 @@ const main = async () => {
 };
 
 const patchDeusExCharacters = (arrayBuffer: ArrayBuffer) => {
-  // 256 x 128
-  // const startingByte = 0x004545f7;
-
   // BumFemaleTex1
   let startingByte = 0x006b5197;
   let maskStartX = 81;
   let maskEndX = 170;
   let maskStartY = 98;
 
+  // Size of the first texture mipmap
   let xLength = 256;
   let yLength = 128;
-  patchMipMap(
-    arrayBuffer,
-    startingByte,
-    xLength,
-    yLength,
-    maskStartX,
-    maskEndX,
-    maskStartY
-  );
 
-  // 128 x 64
-  startingByte = startingByte + 0x8011;
-  maskStartX = Math.round(maskStartX / 2);
-  maskEndX = Math.round(maskEndX / 2);
-  maskStartY = Math.round(maskStartY / 2);
-  xLength = Math.round(xLength / 2);
-  yLength = Math.round(yLength / 2);
-  patchMipMap(
-    arrayBuffer,
-    startingByte,
-    xLength,
-    yLength,
-    maskStartX,
-    maskEndX,
-    maskStartY
-  );
+  // Patch each mipmap in the texture all the way up to and including 4 x 2
+  while (yLength > 1) {
+    patchMipMap(
+      arrayBuffer,
+      startingByte,
+      xLength,
+      yLength,
+      maskStartX,
+      maskEndX,
+      maskStartY
+    );
 
-  // 64 x 32
-  startingByte = startingByte + 0x2010;
-  maskStartX = Math.round(maskStartX / 2);
-  maskEndX = Math.round(maskEndX / 2);
-  maskStartY = Math.round(maskStartY / 2);
-  xLength = Math.round(xLength / 2);
-  yLength = Math.round(yLength / 2);
-  patchMipMap(
-    arrayBuffer,
-    startingByte,
-    xLength,
-    yLength,
-    maskStartX,
-    maskEndX,
-    maskStartY
-  );
+    startingByte =
+      startingByte +
+      xLength * yLength +
+      14 +
+      getCompactIndexSize(Math.round(xLength / 2) * Math.round(yLength / 2));
 
-  // 32 x 16
-  startingByte = startingByte + 0x810;
-  maskStartX = Math.round(maskStartX / 2);
-  maskEndX = Math.round(maskEndX / 2);
-  maskStartY = Math.round(maskStartY / 2);
-  xLength = Math.round(xLength / 2);
-  yLength = Math.round(yLength / 2);
-  patchMipMap(
-    arrayBuffer,
-    startingByte,
-    xLength,
-    yLength,
-    maskStartX,
-    maskEndX,
-    maskStartY
-  );
+    maskStartX = Math.round(maskStartX / 2);
+    maskEndX = Math.round(maskEndX / 2);
+    maskStartY = Math.round(maskStartY / 2);
+    xLength = Math.round(xLength / 2);
+    yLength = Math.round(yLength / 2);
+  }
+};
 
-  // 16 x 8
-  startingByte = startingByte + 0x210;
-  maskStartX = Math.round(maskStartX / 2);
-  maskEndX = Math.round(maskEndX / 2);
-  maskStartY = Math.round(maskStartY / 2);
-  xLength = Math.round(xLength / 2);
-  yLength = Math.round(yLength / 2);
-  patchMipMap(
-    arrayBuffer,
-    startingByte,
-    xLength,
-    yLength,
-    maskStartX,
-    maskEndX,
-    maskStartY
-  );
-
-  // 8 x 4
-  startingByte = startingByte + 0x8f;
-  maskStartX = Math.round(maskStartX / 2);
-  maskEndX = Math.round(maskEndX / 2);
-  maskStartY = Math.round(maskStartY / 2);
-  xLength = Math.round(xLength / 2);
-  yLength = Math.round(yLength / 2);
-  patchMipMap(
-    arrayBuffer,
-    startingByte,
-    xLength,
-    yLength,
-    maskStartX,
-    maskEndX,
-    maskStartY
-  );
-
-  // 4 x 2
-  startingByte = startingByte + 0x2f;
-  maskStartX = Math.round(maskStartX / 2);
-  maskEndX = Math.round(maskEndX / 2);
-  maskStartY = Math.round(maskStartY / 2);
-  xLength = Math.round(xLength / 2);
-  yLength = Math.round(yLength / 2);
-  patchMipMap(
-    arrayBuffer,
-    startingByte,
-    xLength,
-    yLength,
-    maskStartX,
-    maskEndX,
-    maskStartY
-  );
+// Get the size of the compact index value (in bytes) required to store a particular number value
+// The first byte holds up to 2^6 values, each byte after that an additional 2^7 values
+// https://bunnytrack.net/ut-package-format/#compact-index-format
+const getCompactIndexSize = (value: number) => {
+  return Math.floor(Math.log(value / 64) / Math.log(128)) + 2;
 };
 
 const patchMipMap = (
