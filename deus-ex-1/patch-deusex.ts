@@ -1,25 +1,30 @@
 // Requires at least Node 10 for fs/promises
 // To run:
-// npx -p typescript tsc patch-deusex.ts; node patch-deusex.js ~/.steam/steam/steamapps/common/Deus\ Ex/System/DeusExCharacters.u
+// npx -p typescript tsc patch-deusex.ts; node patch-deusex.js ~/.steam/steam/steamapps/common/Deus\ Ex/
 
 import { readFile, writeFile } from 'fs/promises';
 import { resolve } from 'path';
 
 const main = async () => {
   if (process.argv.length !== 3) {
-    console.log('Error: Please provide the path to DeusExCharacters.u');
+    console.log(
+      'Error: Please provide the path to the Deus Ex installation directory'
+    );
     process.exit(1);
   }
 
-  const filePath = process.argv[2];
-  const arrayBuffer = (await readFile(resolve(__dirname, filePath))).buffer;
+  const deusExDirectory = process.argv[2];
 
-  patchDeusExCharacters(arrayBuffer);
-
-  await writeFile(resolve(__dirname, filePath), Buffer.from(arrayBuffer));
+  await patchDeusExCharacters(deusExDirectory);
 };
 
-const patchDeusExCharacters = (arrayBuffer: ArrayBuffer) => {
+const patchDeusExCharacters = async (deusExDirectory: string) => {
+  const filePath = 'System/DeusExCharacters.u';
+
+  const arrayBuffer = (
+    await readFile(resolve(__dirname, deusExDirectory, filePath))
+  ).buffer;
+
   // BumFemaleTex1
   patchMipMaps(arrayBuffer, 0x006b5197, 83, 81, 166);
 
@@ -34,6 +39,11 @@ const patchDeusExCharacters = (arrayBuffer: ArrayBuffer) => {
 
   // SandraRentonTex1
   patchMipMaps(arrayBuffer, 0x00426b58, 83, 81, 166);
+
+  await writeFile(
+    resolve(__dirname, deusExDirectory, filePath),
+    Buffer.from(arrayBuffer)
+  );
 };
 
 const patchMipMaps = (
