@@ -25,10 +25,16 @@ Go to _Settings_ > _Keyboard/Mouse_
    - F12 is the default key for Steam screenshots, so it's either remap the game or change the key used by Steam
    - F in the game is used by default to center the view. Pretty useless
 
-#### Apply patches to make game more family-friendly
+#### Apply patches to make game marginally more family-friendly
 
-These patches mostly add more clothing to some characters
+This updates clothing for some characters and removes a billboard
 
-```
-xxd -c1 -r DeusEx.u.patch ~/.steam/steam/steamapps/common/Deus\ Ex/System/DeusEx.u
-```
+1. Download [patch-deusex.ts](patch-deusex.ts) from this directory and run it using `npx` (requires Node.js 10 or later):
+
+   ```
+   npx -p typescript tsc patch-deusex.ts; node patch-deusex.js ~/.steam/steam/steamapps/common/Deus\ Ex/
+   ```
+
+   (Replace `~/.steam/steam/steamapps/common/Deus\ Ex/` with the path to your Deus Ex directory)
+
+   Change the path to your Deus Ex directory as needed
