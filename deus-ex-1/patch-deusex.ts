@@ -26,6 +26,8 @@ const patchDeusExCharacters = async (deusExDirectory: string) => {
   ).buffer;
 
   // BumFemaleTex1
+  // The exclude coordinates are for hands and parts of arms. It ends up looking a bit
+  // like a dark turtleneck. Classy 😆
   patchMipMaps(arrayBuffer, 0x006b5197, 83, 81, 166);
 
   // Hooker1Tex3
@@ -64,9 +66,10 @@ const patchNewYorkCity = async (deusExDirectory: string) => {
 const patchMipMaps = (
   arrayBuffer: ArrayBuffer,
   startingByte: number,
-  maskStartX?: number,
-  maskStartY?: number,
-  maskEndX?: number
+  // TODO: create separate interface for exclude properties
+  excludeStartX?: number,
+  excludeStartY?: number,
+  excludeEndX?: number
 ) => {
   // Size of the first texture mipmap
   let xLength = 256;
@@ -79,9 +82,9 @@ const patchMipMaps = (
       startingByte,
       xLength,
       yLength,
-      maskStartX,
-      maskStartY,
-      maskEndX
+      excludeStartX,
+      excludeStartY,
+      excludeEndX
     );
 
     startingByte =
@@ -90,14 +93,14 @@ const patchMipMaps = (
       14 +
       getCompactIndexSize(Math.round(xLength / 2) * Math.round(yLength / 2));
 
-    if (maskStartX) {
-      maskStartX = Math.round(maskStartX / 2);
+    if (excludeStartX) {
+      excludeStartX = Math.round(excludeStartX / 2);
     }
-    if (maskStartY) {
-      maskStartY = Math.round(maskStartY / 2);
+    if (excludeStartY) {
+      excludeStartY = Math.round(excludeStartY / 2);
     }
-    if (maskEndX) {
-      maskEndX = Math.round(maskEndX / 2);
+    if (excludeEndX) {
+      excludeEndX = Math.round(excludeEndX / 2);
     }
     xLength = Math.round(xLength / 2);
     yLength = Math.round(yLength / 2);
@@ -111,26 +114,35 @@ const getCompactIndexSize = (value: number) => {
   return Math.floor(Math.log(value / 64) / Math.log(128)) + 2;
 };
 
+// Replaces bytes in a mipmap with a darker colour. I first tried changing the texture for
+// a different one but the mesh itself needed to be changed, which is impractical since
+// changing animations for vertex meshes is very time-consuming (each frame needs to be
+// changed), and I don't think the package files can be modified in a way that changes
+// their size because it would break all references. The package files can be modified
+// by recompiling them, but according to the SDK documentation, some packages (such as
+// DeusExCharacters.u) can't be modified because the source files aren't included in the
+// SDK
 const patchMipMap = (
   arrayBuffer: ArrayBuffer,
   startingByte: number,
   xLength: number,
   yLength: number,
-  maskStartX?: number,
-  maskStartY?: number,
-  maskEndX?: number
+  excludeStartX?: number,
+  excludeStartY?: number,
+  excludeEndX?: number
 ) => {
   for (let currentRow = 0; currentRow < yLength; currentRow++) {
     for (let currentColumn = 0; currentColumn < xLength; currentColumn++) {
-      let currentByte = startingByte + currentRow * xLength + currentColumn;
+      const currentByte = startingByte + currentRow * xLength + currentColumn;
 
+      // TODO: add functionality for excludeEndY for completeness
       if (
-        !maskStartY ||
-        currentRow < maskStartY ||
-        !maskStartX ||
-        currentColumn < maskStartX ||
-        !maskEndX ||
-        currentColumn > maskEndX
+        !excludeStartY ||
+        currentRow < excludeStartY ||
+        !excludeStartX ||
+        currentColumn < excludeStartX ||
+        !excludeEndX ||
+        currentColumn > excludeEndX
       ) {
         // Swap the colour for a darker one in the colour palette
         // Colours start at 0x01; for most textures 0x01 is black and they get gradually lighter/more colourful
