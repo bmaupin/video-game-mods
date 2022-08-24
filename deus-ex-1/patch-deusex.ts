@@ -16,11 +16,11 @@ const main = async () => {
   const deusExDirectory = process.argv[2];
 
   await patchDeusExCharacters(deusExDirectory);
+  await patchNewYorkCity(deusExDirectory);
 };
 
 const patchDeusExCharacters = async (deusExDirectory: string) => {
   const filePath = 'System/DeusExCharacters.u';
-
   const arrayBuffer = (
     await readFile(resolve(__dirname, deusExDirectory, filePath))
   ).buffer;
@@ -46,12 +46,27 @@ const patchDeusExCharacters = async (deusExDirectory: string) => {
   );
 };
 
+const patchNewYorkCity = async (deusExDirectory: string) => {
+  const filePath = 'Textures/NewYorkCity.utx';
+  const arrayBuffer = (
+    await readFile(resolve(__dirname, deusExDirectory, filePath))
+  ).buffer;
+
+  // JadeDragonBB
+  patchMipMaps(arrayBuffer, 0x000fa7c0);
+
+  await writeFile(
+    resolve(__dirname, deusExDirectory, filePath),
+    Buffer.from(arrayBuffer)
+  );
+};
+
 const patchMipMaps = (
   arrayBuffer: ArrayBuffer,
   startingByte: number,
-  maskStartX: number,
-  maskStartY: number,
-  maskEndX: number
+  maskStartX?: number,
+  maskStartY?: number,
+  maskEndX?: number
 ) => {
   // Size of the first texture mipmap
   let xLength = 256;
@@ -75,9 +90,15 @@ const patchMipMaps = (
       14 +
       getCompactIndexSize(Math.round(xLength / 2) * Math.round(yLength / 2));
 
-    maskStartX = Math.round(maskStartX / 2);
-    maskEndX = Math.round(maskEndX / 2);
-    maskStartY = Math.round(maskStartY / 2);
+    if (maskStartX) {
+      maskStartX = Math.round(maskStartX / 2);
+    }
+    if (maskStartY) {
+      maskStartY = Math.round(maskStartY / 2);
+    }
+    if (maskEndX) {
+      maskEndX = Math.round(maskEndX / 2);
+    }
     xLength = Math.round(xLength / 2);
     yLength = Math.round(yLength / 2);
   }
@@ -95,17 +116,20 @@ const patchMipMap = (
   startingByte: number,
   xLength: number,
   yLength: number,
-  maskStartX: number,
-  maskStartY: number,
-  maskEndX: number
+  maskStartX?: number,
+  maskStartY?: number,
+  maskEndX?: number
 ) => {
   for (let currentRow = 0; currentRow < yLength; currentRow++) {
     for (let currentColumn = 0; currentColumn < xLength; currentColumn++) {
       let currentByte = startingByte + currentRow * xLength + currentColumn;
 
       if (
+        !maskStartY ||
         currentRow < maskStartY ||
+        !maskStartX ||
         currentColumn < maskStartX ||
+        !maskEndX ||
         currentColumn > maskEndX
       ) {
         // Swap the colour for a darker one in the colour palette
