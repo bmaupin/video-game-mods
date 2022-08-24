@@ -92,54 +92,32 @@
 
    e.g. TrenchShirtTex1 = `-793` = `D9 0C`
 
-#### Create patch
+1. Update [patch-deusex.ts](patch-deusex.ts) with the changes
 
-ⓘ Since plain text files are easier to work with, this method uses plain text patch files, which is possible because we're working with small files and the length of the files isn't being changed.
+#### Mask all or part of textures
 
-- Create a patch file manually
+1. Identify the texture using the steps above
 
-  Patch files are pretty straightforward, each line has an address, byte, and optional comment, e.g.
+1. Open the file containing the texture with UTPT (e.g. System/DeusExCharacters.u)
 
-  ```
-  0047b087: ed # BumFemale BumFemaleTex1 -> JunkieMaleTex1
-  0047b088: 12
-  ```
+1. In the _Export Tree_ pane on the left, right-click the texture > _Analize Raw Object_
 
-- Or, edit the file with a hex editor and create the patch file using `xxd`:
+1. If the UTPT window is maximised, double-click the title-bar to un-maximise it (otherwise UTPT may crash)
 
-  1.  Edit the file with a hex editor
+1. In the right pane click _Format_ > _Auto format_
 
-      1. Open DeusEx.u with a hex editor
+1. In the right pane, click the first yellow byte (this is the first byte of the image data of the first mipmap)
 
-         ```
-         ghex ~/.steam/steam/steamapps/common/Deus\ Ex/System/DeusEx.u
-         ```
+1. Note the _Offset in Package_ (at the bottom) to get the exact starting binary offset
 
-      1. Go to the byte offset
+   e.g. 0x00426b58
 
-         e.g. for ghex use _Edit_ > _Goto Byte_
+1. Optionally determine an area to exclude from the mask
 
-      1. Make sure the value of the property matches what you found earlier
+   1. In UTPT, go to _File_ > _Options_ > _Extracting_ and set _Base Directory_ to the directory where you'd like the textures extracted
 
-      1. Replace the value of the old texture with the value of the new texture
+   1. Right-click the texture in the left pane in UTPT > _Extract as Image_ > _First MipMap as BMP_
 
-         In ghex, you can type directly into the main window to edit the file
+   1. Open the exported texture in an image editor (e.g. GIMP) and make a note of the start and end coordinates to exclude from the mask
 
-         e.g. replace E4 12 at 0x000525c6 with D9 0C
-
-      1. Save the file
-
-  1.  Generate the patch
-
-      ```
-      comm -13 <(xxd -c1 DeusEx.u.bak) <(xxd -c1 DeusEx.u) > DeusEx.u.patch
-      ```
-
-      - `xxd -c1` dumps the files into hexadecimal text values, one byte per line
-      - `comm -13` shows only the lines in the second file that differ from the first file
-
-To apply the patch:
-
-```
-xxd -c1 -r DeusEx.u.patch ~/.steam/steam/steamapps/common/Deus\ Ex/System/DeusEx.u
-```
+1. Update [patch-deusex.ts](patch-deusex.ts) with the changes
