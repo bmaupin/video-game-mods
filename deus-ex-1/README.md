@@ -32,9 +32,7 @@ This updates clothing for some characters and removes a billboard
 1. Download [patch-deusex.ts](patch-deusex.ts) from this directory and run it using `npx` (requires Node.js 10 or later):
 
    ```
-   npx -p typescript tsc patch-deusex.ts; node patch-deusex.js ~/.steam/steam/steamapps/common/Deus\ Ex/
+   npx -p @types/node -p typescript -p ts-node ts-node patch-deusex.ts ~/.steam/steam/steamapps/common/Deus\ Ex/
    ```
 
    (Replace `~/.steam/steam/steamapps/common/Deus\ Ex/` with the path to your Deus Ex directory)
-
-   Change the path to your Deus Ex directory as needed

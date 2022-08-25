@@ -66,7 +66,9 @@ const patchNewYorkCity = async (deusExDirectory: string) => {
 const patchMipMaps = (
   arrayBuffer: ArrayBuffer,
   startingByte: number,
-  // TODO: create separate interface for exclude properties
+  // TODO: create separate interface for exclude properties? It would be easier to pass
+  //       them around, but on the other hand we'd have to make a copy since we're
+  //       modifying them in this function
   excludeStartX?: number,
   excludeStartY?: number,
   excludeEndX?: number
