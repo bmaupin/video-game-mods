@@ -5,6 +5,13 @@
 import { readFile, writeFile } from 'fs/promises';
 import { resolve } from 'path';
 
+interface ExcludeRegion {
+  startX: number;
+  startY: number;
+  endX: number;
+  // TODO: add endY for consistency?
+}
+
 const main = async () => {
   if (process.argv.length !== 3) {
     console.log(
@@ -28,19 +35,19 @@ const patchDeusExCharacters = async (deusExDirectory: string) => {
   // BumFemaleTex1
   // The exclude coordinates are for hands and parts of arms. It ends up looking a bit
   // like a dark turtleneck. Classy 😆
-  patchMipMaps(arrayBuffer, 0x006b5197, 83, 81, 166);
+  patchMipMaps(arrayBuffer, 0x006b5197, { startX: 83, startY: 81, endX: 166 });
 
   // Hooker1Tex3
-  patchMipMaps(arrayBuffer, 0x003e0dbe, 83, 81, 166);
+  patchMipMaps(arrayBuffer, 0x003e0dbe, { startX: 83, startY: 81, endX: 166 });
 
   // Hooker2Tex3
-  patchMipMaps(arrayBuffer, 0x004113bc, 83, 94, 166);
+  patchMipMaps(arrayBuffer, 0x004113bc, { startX: 83, startY: 94, endX: 166 });
 
   // JunkieFemaleTex1
-  patchMipMaps(arrayBuffer, 0x004316d0, 83, 81, 166);
+  patchMipMaps(arrayBuffer, 0x004316d0, { startX: 83, startY: 81, endX: 166 });
 
   // SandraRentonTex1
-  patchMipMaps(arrayBuffer, 0x00426b58, 83, 81, 166);
+  patchMipMaps(arrayBuffer, 0x00426b58, { startX: 83, startY: 81, endX: 166 });
 
   await writeFile(
     resolve(__dirname, deusExDirectory, filePath),
@@ -66,28 +73,14 @@ const patchNewYorkCity = async (deusExDirectory: string) => {
 const patchMipMaps = (
   arrayBuffer: ArrayBuffer,
   startingByte: number,
-  // TODO: create separate interface for exclude properties? It would be easier to pass
-  //       them around, but on the other hand we'd have to make a copy since we're
-  //       modifying them in this function
-  excludeStartX?: number,
-  excludeStartY?: number,
-  excludeEndX?: number
+  excludeRegion?: ExcludeRegion
 ) => {
   // Size of the first texture mipmap
   let xLength = 256;
   let yLength = 128;
-
   // Patch each mipmap in the texture all the way up to and including 4 x 2
   while (yLength > 1) {
-    patchMipMap(
-      arrayBuffer,
-      startingByte,
-      xLength,
-      yLength,
-      excludeStartX,
-      excludeStartY,
-      excludeEndX
-    );
+    patchMipMap(arrayBuffer, startingByte, xLength, yLength, excludeRegion);
 
     startingByte =
       startingByte +
@@ -95,14 +88,10 @@ const patchMipMaps = (
       14 +
       getCompactIndexSize(Math.round(xLength / 2) * Math.round(yLength / 2));
 
-    if (excludeStartX) {
-      excludeStartX = Math.round(excludeStartX / 2);
-    }
-    if (excludeStartY) {
-      excludeStartY = Math.round(excludeStartY / 2);
-    }
-    if (excludeEndX) {
-      excludeEndX = Math.round(excludeEndX / 2);
+    if (excludeRegion) {
+      excludeRegion.startX = Math.round(excludeRegion.startX / 2);
+      excludeRegion.startY = Math.round(excludeRegion.startY / 2);
+      excludeRegion.endX = Math.round(excludeRegion.endX / 2);
     }
     xLength = Math.round(xLength / 2);
     yLength = Math.round(yLength / 2);
@@ -129,22 +118,19 @@ const patchMipMap = (
   startingByte: number,
   xLength: number,
   yLength: number,
-  excludeStartX?: number,
-  excludeStartY?: number,
-  excludeEndX?: number
+  excludeRegion?: ExcludeRegion
 ) => {
   for (let currentRow = 0; currentRow < yLength; currentRow++) {
     for (let currentColumn = 0; currentColumn < xLength; currentColumn++) {
       const currentByte = startingByte + currentRow * xLength + currentColumn;
 
-      // TODO: add functionality for excludeEndY for completeness
       if (
-        !excludeStartY ||
-        currentRow < excludeStartY ||
-        !excludeStartX ||
-        currentColumn < excludeStartX ||
-        !excludeEndX ||
-        currentColumn > excludeEndX
+        !excludeRegion ||
+        currentRow < excludeRegion.startY ||
+        !excludeRegion ||
+        currentColumn < excludeRegion.startX ||
+        !excludeRegion ||
+        currentColumn > excludeRegion.endX
       ) {
         // Swap the colour for a darker one in the colour palette
         // Colours start at 0x01; for most textures 0x01 is black and they get gradually lighter/more colourful
