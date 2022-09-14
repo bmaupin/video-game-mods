@@ -1,6 +1,6 @@
 # Star Wars: Knights of the Old Republic
 
-Mod to make it more family-friendly
+Mod to make it more family-friendly by updating clothing for some characters
 
 #### Installation
 

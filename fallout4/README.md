@@ -12,6 +12,11 @@
    iMaxAnisotropy=0
    ```
 
+Other performance tweaks:
+
+- https://www.nexusmods.com/skyrimspecialedition/mods/4875?tab=logs
+- https://www.nexusmods.com/fallout4/mods/24108/
+
 #### Windowed mode
 
 Add the following to ~/.steam/steam/steamapps/compatdata/377160/pfx/drive_c/users/steamuser/Documents/My Games/Fallout4/Fallout4Prefs.ini
@@ -25,7 +30,7 @@ iSize W=1280
 
 (height/width might need to be set in the graphical interface; change values as needed)
 
-#### Disable blood and gore
+#### Disable blood splatters and gore
 
 Add the following to ~/.steam/steam/steamapps/compatdata/377160/pfx/drive_c/users/steamuser/Documents/My Games/Fallout4/Fallout.ini
 

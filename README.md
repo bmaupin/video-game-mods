@@ -13,6 +13,8 @@ Mods and configs for various video games
    - If you have a small screen (e.g. a laptop) this allows you to use full screen and turn down the resolution quite a bit
    - Integrated Intel graphics will need to be turned down to at least 720p for most games made since 2015, and some games need to be turned down even more (e.g. 540p)
 
+   ⓘ Some games offer adaptive resolution/resolution scaling, but in my experience these typically perform much worse than just turning down the resolution
+
 1. Lock resolution to 30 FPS
 
    For games where this isn't an option in the graphical settings, you can cap the FPS like this if you're using Proton:
