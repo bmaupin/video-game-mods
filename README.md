@@ -85,4 +85,12 @@ r_AntialiasingTAAFalloffHiFreq
 
    Make sure you're using kernel 5.16 or later
 
+1. Try [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom)
+
+1. Try [`DXVK_ASYNC=1`](https://github.com/GloriousEggroll/proton-ge-custom#modification)
+
+1. Try an older version of DirectX
+
+   e.g. [`PROTON_NO_D3D12=1`](https://github.com/GloriousEggroll/proton-ge-custom#modification) (Proton GE only), `PROTON_NO_D3D11=1`, etc.
+
 1. See more tips here: [https://www.protondb.com/help/improving-performance](https://www.protondb.com/help/improving-performance)
