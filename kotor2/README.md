@@ -1,5 +1,17 @@
 # Star Wars: Knights of the Old Republic II
 
+## Performance
+
+#### Low frame rate fix
+
+[https://www.pcgamingwiki.com/wiki/Star_Wars:\_Knights_of_the_Old_Republic_II\_-_The_Sith_Lords#Low_performance](https://www.pcgamingwiki.com/wiki/Star_Wars:_Knights_of_the_Old_Republic_II_-_The_Sith_Lords#Low_performance)
+
+```
+sed -i 's/DisableVertexBufferObjects=1/Disable Vertex Buffer Objects=1/' ~/.steam/steam/steamapps/common/Knights\ of\ the\ Old\ Republic\ II/steamassets/swkotor2.ini
+```
+
+## Content mod
+
 Mod to make it more family-friendly by updating clothing for some characters
 
 #### Installation
