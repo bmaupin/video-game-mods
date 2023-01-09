@@ -43,6 +43,15 @@ r_AntialiasingModeSCull
 r_AntialiasingTAAFalloffHiFreq
 ```
 
+ⓘ Make sure you also use `strings -e l` to get any UTF-16 strings, e.g.
+
+```
+strings -e l Game.exe | egrep ^b | sort -u | head -n 3
+bAdaptiveTraining
+bAllowAltTabToSwitchBetweenWindowedAndFullscreen
+bAllowDownsampledTranslucency
+```
+
 #### Proton performance tips
 
 1. Use game mode
