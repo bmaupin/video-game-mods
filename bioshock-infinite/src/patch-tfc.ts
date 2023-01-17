@@ -35,6 +35,10 @@ const patchTfc = async (
     await validateChunkBlockData(arrayBuffer, startingByte, byteLength);
 
   const newCompressedChunkBlock = generateBlackDxt1(decompressedChunkBlockSize);
+  invariant(
+    newCompressedChunkBlock.length <= oldCompressedChunkBlockSize,
+    'New compressed chunk block should be equal to or smaller than original compressed chunk block'
+  );
 
   await writeFile(
     resolve(process.cwd(), 'compressed-raw-dds.bin'),
