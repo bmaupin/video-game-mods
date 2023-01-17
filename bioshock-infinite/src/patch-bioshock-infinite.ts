@@ -8,8 +8,7 @@ import lzo from 'lzo';
 import { resolve } from 'path';
 import invariant from 'tiny-invariant';
 
-// @ts-ignore
-import UTReader from '../lib/UTReader';
+import { Ue3Package } from './Ue3Package';
 
 const main = async () => {
   if (process.argv.length !== 3) {
@@ -36,11 +35,7 @@ const readPackage = async (gameDirectory: string, packageFile: string) => {
     )
   ).buffer;
 
-  const reader = new UTReader(arrayBuffer);
-  const unrealPackage = reader.readPackage();
-  console.log(unrealPackage.version);
-
-  console.log(unrealPackage.getNameTable());
+  const unrealPackage = new Ue3Package(arrayBuffer);
 };
 
 main();
