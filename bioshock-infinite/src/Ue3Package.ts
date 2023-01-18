@@ -4,6 +4,7 @@ export class Ue3Package {
   private arrayBuffer: ArrayBuffer;
   private nameTable: String[] = [];
   private reader: UePackageReader;
+  fileVersion: number = 0;
 
   constructor(arrayBuffer: ArrayBuffer) {
     this.arrayBuffer = arrayBuffer;
@@ -23,30 +24,27 @@ export class Ue3Package {
       'Validate file signature'
     );
 
-    const packageVersion = this.reader.getUint16();
+    this.fileVersion = this.reader.getUint16();
     // I think UE4 package versions are < 0
-    invariant(packageVersion > 0, 'Package version should be > 0');
+    invariant(this.fileVersion > 0, 'Package version should be > 0');
 
     const _licenseeVersion = this.reader.getUint16();
-    if (packageVersion >= 249) {
+    if (this.fileVersion >= 249) {
       const _headerSize = this.reader.getUint32();
     }
     // TODO: add version check for this; it's not documented
     const _unknown = this.reader.getUint32();
-    if (packageVersion >= 269) {
+    if (this.fileVersion >= 269) {
       const _folderName = this.reader.getString();
     }
     const _packageFlags = this.reader.getUint32();
 
-    // // Skip ahead to
-    // const nameCountStartingByte = 0x10 + folderNameSize + 0x04;
-    // const nameTableNumEntries = dataView.getUint32(nameCountStartingByte, true);
-    // const nameTableStartingByte = dataView.getUint32(
-    //   nameCountStartingByte + 4,
-    //   true
-    // );
+    const nameTableNumEntries = this.reader.getUint32();
+    const nameTableStartingByte = this.reader.getUint32();
 
-    // this.populateNameTable(nameTableStartingByte, nameTableNumEntries);
+    this.populateNameTable(nameTableStartingByte, nameTableNumEntries);
+    console.log('nameTable=', this.nameTable);
+    console.log('test=', this.nameTable.includes('BloodPool_MASK'));
   }
 
   // https://stackoverflow.com/a/19746771/399105
@@ -62,18 +60,16 @@ export class Ue3Package {
     );
   };
 
-  // TODO: 0xcfb
-  private populateNameTable(
-    startingByte: number,
-    numEntries: number
-  ): String[] {
+  private populateNameTable(startingByte: number, numEntries: number) {
+    this.reader.seekToByte(startingByte);
+
     for (let i = 0; i <= numEntries; i++) {
-      // this.nameTable[i] = getUeString
-      // TODO
-      // 1. get each name table entry
-      //    1. length (4 bytes)
-      //    1. string
-      //    1. flags (8 bytes)
+      this.nameTable[i] = this.reader.getString();
+      if (this.fileVersion < 141) {
+        const _nameFlags = this.reader.getUint8Array(4);
+      } else {
+        const _nameFlags = this.reader.getUint8Array(8);
+      }
     }
   }
 }
