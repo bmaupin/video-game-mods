@@ -1,16 +1,27 @@
 import invariant from 'tiny-invariant';
 
+// TODO: if we ever want to make this work with UE1/UE2 packages, we'll probably need
+//       to update many of the numeric values to be read using the compact index format
+//       (https://wiki.beyondunreal.com/Unreal_package#Compact_index_format)
 export class Ue3Package {
   private arrayBuffer: ArrayBuffer;
   private nameTable: String[] = [];
+  private nameTableCount: number = 0;
+  private nameTableOffset: number = 0;
   private reader: UePackageReader;
-  fileVersion: number = 0;
+
+  private _fileVersion: number = 0;
 
   constructor(arrayBuffer: ArrayBuffer) {
     this.arrayBuffer = arrayBuffer;
     this.reader = new UePackageReader(this.arrayBuffer);
 
     this.readHeader();
+    this.populateNameTable();
+  }
+
+  get fileVersion() {
+    return this._fileVersion;
   }
 
   // http://eliotvu.com/page/unreal-package-file-format
@@ -24,7 +35,7 @@ export class Ue3Package {
       'Validate file signature'
     );
 
-    this.fileVersion = this.reader.getUint16();
+    this._fileVersion = this.reader.getUint16();
     // I think UE4 package versions are < 0
     invariant(this.fileVersion > 0, 'Package version should be > 0');
 
@@ -39,12 +50,8 @@ export class Ue3Package {
     }
     const _packageFlags = this.reader.getUint32();
 
-    const nameTableNumEntries = this.reader.getUint32();
-    const nameTableStartingByte = this.reader.getUint32();
-
-    this.populateNameTable(nameTableStartingByte, nameTableNumEntries);
-    console.log('nameTable=', this.nameTable);
-    console.log('test=', this.nameTable.includes('BloodPool_MASK'));
+    this.nameTableCount = this.reader.getUint32();
+    this.nameTableOffset = this.reader.getUint32();
   }
 
   // https://stackoverflow.com/a/19746771/399105
@@ -60,10 +67,11 @@ export class Ue3Package {
     );
   };
 
-  private populateNameTable(startingByte: number, numEntries: number) {
-    this.reader.seekToByte(startingByte);
+  private populateNameTable() {
+    const oldByteOffset = this.reader.byteOffset;
+    this.reader.byteOffset = this.nameTableOffset;
 
-    for (let i = 0; i <= numEntries; i++) {
+    for (let i = 0; i <= this.nameTableCount; i++) {
       this.nameTable[i] = this.reader.getString();
       if (this.fileVersion < 141) {
         const _nameFlags = this.reader.getUint8Array(4);
@@ -71,17 +79,33 @@ export class Ue3Package {
         const _nameFlags = this.reader.getUint8Array(8);
       }
     }
+
+    // Put the old byte offset back so that we can run this method whenever we want
+    // without breaking any other data serialization
+    this.reader.byteOffset = oldByteOffset;
   }
 }
 
 class UePackageReader {
   private arrayBuffer: ArrayBuffer;
-  private byteOffset: number = 0;
+  private _byteOffset: number = 0;
   private dataView: DataView;
 
   constructor(arrayBuffer: ArrayBuffer) {
     this.arrayBuffer = arrayBuffer;
     this.dataView = new DataView(this.arrayBuffer);
+  }
+
+  get byteOffset() {
+    return this._byteOffset;
+  }
+
+  set byteOffset(newByteOffset: number) {
+    invariant(
+      newByteOffset <= this.arrayBuffer.byteLength,
+      "New byte offset isn't beyond the end of the file"
+    );
+    this._byteOffset = newByteOffset;
   }
 
   getUint8Array(length: number): Uint8Array {
@@ -114,13 +138,5 @@ class UePackageReader {
     this.byteOffset += stringLength;
 
     return new TextDecoder('utf8').decode(uintArray).replace(/\0.*$/g, '');
-  }
-
-  seekToByte(byteOffset: number): void {
-    invariant(
-      byteOffset <= this.arrayBuffer.byteLength,
-      "(seekToByte) offset isn't beyond the end of the file"
-    );
-    this.byteOffset = byteOffset;
   }
 }
