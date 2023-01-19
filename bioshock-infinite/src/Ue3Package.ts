@@ -5,6 +5,9 @@ import invariant from 'tiny-invariant';
 //       (https://wiki.beyondunreal.com/Unreal_package#Compact_index_format)
 export class Ue3Package {
   private arrayBuffer: ArrayBuffer;
+  private importTable: String[] = [];
+  private importTableCount: number = 0;
+  private importTableOffset: number = 0;
   private nameTable: String[] = [];
   private nameTableCount: number = 0;
   private nameTableOffset: number = 0;
@@ -18,6 +21,7 @@ export class Ue3Package {
 
     this.readHeader();
     this.populateNameTable();
+    this.populateImportTable();
   }
 
   get fileVersion() {
@@ -52,6 +56,12 @@ export class Ue3Package {
 
     this.nameTableCount = this.reader.getUint32();
     this.nameTableOffset = this.reader.getUint32();
+
+    this.exportTableCount = this.reader.getUint32();
+    this.exportTableOffset = this.reader.getUint32();
+
+    this.importTableCount = this.reader.getUint32();
+    this.importTableOffset = this.reader.getUint32();
   }
 
   // https://stackoverflow.com/a/19746771/399105
@@ -78,6 +88,25 @@ export class Ue3Package {
       } else {
         const _nameFlags = this.reader.getUint8Array(8);
       }
+    }
+
+    // Put the old byte offset back so that we can run this method whenever we want
+    // without breaking any other data serialization
+    this.reader.byteOffset = oldByteOffset;
+  }
+
+  // TODO: 0x1942b
+  private populateImportTable() {
+    const oldByteOffset = this.reader.byteOffset;
+    this.reader.byteOffset = this.importTableOffset;
+
+    for (let i = 0; i <= this.importTableCount; i++) {
+      const _classPackageIndex = this.reader.getUint32();
+      const _classIndex = this.reader.getUint32();
+      const _packageIndex = this.reader.getUint32();
+
+      const nameIndex = this.reader.getUint32();
+      this.importTable[i] = this.nameTable[nameIndex];
     }
 
     // Put the old byte offset back so that we can run this method whenever we want
