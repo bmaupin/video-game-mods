@@ -5,6 +5,14 @@ import invariant from 'tiny-invariant';
 //       (https://wiki.beyondunreal.com/Unreal_package#Compact_index_format)
 export class Ue3Package {
   private arrayBuffer: ArrayBuffer;
+  private exportTable: {
+    className: String;
+    name: String;
+    serialOffset: number;
+    serialSize: number;
+  }[] = [];
+  private exportTableCount: number = 0;
+  private exportTableOffset: number = 0;
   private importTable: String[] = [];
   private importTableCount: number = 0;
   private importTableOffset: number = 0;
@@ -22,6 +30,7 @@ export class Ue3Package {
     this.readHeader();
     this.populateNameTable();
     this.populateImportTable();
+    this.populateExportTable();
   }
 
   get fileVersion() {
@@ -107,6 +116,50 @@ export class Ue3Package {
 
       const nameIndex = this.reader.getUint32();
       this.importTable[i] = this.nameTable[nameIndex];
+    }
+
+    // Put the old byte offset back so that we can run this method whenever we want
+    // without breaking any other data serialization
+    this.reader.byteOffset = oldByteOffset;
+  }
+
+  // TODO: which of these do we care about? name, serial size, serial offset, class?
+  // 0x1c173
+  private populateExportTable() {
+    const oldByteOffset = this.reader.byteOffset;
+    this.reader.byteOffset = this.exportTableOffset;
+
+    for (let i = 0; i <= this.exportTableCount; i++) {
+      const classIndex = this.reader.getUint32();
+      const _superIndex = this.reader.getUint32();
+      const _packageIndex = this.reader.getUint32();
+      const nameIndex = this.reader.getUint32();
+
+      if (this.fileVersion >= 220) {
+        const _archeTypeIndex = this.reader.getUint32();
+      }
+      if (this.fileVersion < 195) {
+        const _objectFlags = this.reader.getUint8Array(4);
+      } else {
+        const _objectFlags = this.reader.getUint8Array(8);
+      }
+
+      const serialSize = this.reader.getUint32();
+      let serialOffset = 0;
+      if (serialSize > 0) {
+        serialOffset = this.reader.getUint32();
+      }
+
+      // TODO
+      const _unknown1 = this.reader.getUint32();
+      const _unknown2 = this.reader.getUint32();
+
+      this.exportTable[i] = {
+        className: this.nameTable[classIndex],
+        name: this.nameTable[nameIndex],
+        serialOffset,
+        serialSize,
+      };
     }
 
     // Put the old byte offset back so that we can run this method whenever we want
