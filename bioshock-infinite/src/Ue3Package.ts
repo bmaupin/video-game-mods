@@ -6,17 +6,17 @@ import invariant from 'tiny-invariant';
 export class Ue3Package {
   private arrayBuffer: ArrayBuffer;
   private exportTable: {
-    className: String;
-    name: String;
+    className: string;
+    name: string;
     serialOffset: number;
     serialSize: number;
   }[] = [];
   private exportTableCount: number = 0;
   private exportTableOffset: number = 0;
-  private importTable: String[] = [];
+  private importTable: string[] = [];
   private importTableCount: number = 0;
   private importTableOffset: number = 0;
-  private nameTable: String[] = [];
+  private nameTable: string[] = [];
   private nameTableCount: number = 0;
   private nameTableOffset: number = 0;
   private reader: UePackageReader;
@@ -110,12 +110,12 @@ export class Ue3Package {
     this.reader.byteOffset = this.importTableOffset;
 
     for (let i = 0; i <= this.importTableCount; i++) {
-      const _classPackageIndex = this.reader.getUint32();
-      const _classIndex = this.reader.getUint32();
-      const _packageIndex = this.reader.getUint32();
+      const _packageName = this.lookupNameIndex();
+      const _className = this.lookupNameIndex();
+      const _outerIndex = this.reader.getUint32();
 
-      const nameIndex = this.reader.getUint32();
-      this.importTable[i] = this.nameTable[nameIndex];
+      const name = this.lookupNameIndex();
+      this.importTable[i] = name;
     }
 
     // Put the old byte offset back so that we can run this method whenever we want
@@ -123,20 +123,19 @@ export class Ue3Package {
     this.reader.byteOffset = oldByteOffset;
   }
 
-  // TODO: which of these do we care about? name, serial size, serial offset, class?
-  // 0x1c173
+  // TODO: 0x1c173
   private populateExportTable() {
     const oldByteOffset = this.reader.byteOffset;
     this.reader.byteOffset = this.exportTableOffset;
 
     for (let i = 0; i <= this.exportTableCount; i++) {
-      const classIndex = this.reader.getUint32();
-      const _superIndex = this.reader.getUint32();
-      const _packageIndex = this.reader.getUint32();
-      const nameIndex = this.reader.getUint32();
+      const className = this.lookupObjectIndex();
+      const _superIndex = this.reader.getInt32();
+      const _outerIndex = this.reader.getInt32();
+      const name = this.lookupNameIndex();
 
       if (this.fileVersion >= 220) {
-        const _archeTypeIndex = this.reader.getUint32();
+        const _archeTypeIndex = this.reader.getInt32();
       }
       if (this.fileVersion < 195) {
         const _objectFlags = this.reader.getUint8Array(4);
@@ -146,7 +145,7 @@ export class Ue3Package {
 
       const serialSize = this.reader.getUint32();
       let serialOffset = 0;
-      if (serialSize > 0) {
+      if (serialSize > 0 || this.fileVersion > 249) {
         serialOffset = this.reader.getUint32();
       }
 
@@ -155,8 +154,8 @@ export class Ue3Package {
       const _unknown2 = this.reader.getUint32();
 
       this.exportTable[i] = {
-        className: this.nameTable[classIndex],
-        name: this.nameTable[nameIndex],
+        className,
+        name,
         serialOffset,
         serialSize,
       };
@@ -165,6 +164,32 @@ export class Ue3Package {
     // Put the old byte offset back so that we can run this method whenever we want
     // without breaking any other data serialization
     this.reader.byteOffset = oldByteOffset;
+  }
+
+  private lookupNameIndex(): string {
+    const nameIndex = this.reader.getUint32();
+    let name = this.nameTable[nameIndex];
+
+    if (this.fileVersion >= 343) {
+      const nameNumber = this.reader.getUint32() - 1;
+      if (nameNumber > -1) {
+        name += `_${nameNumber}`;
+      }
+    }
+
+    return name;
+  }
+
+  private lookupObjectIndex(): string {
+    const classIndex = this.reader.getInt32();
+    let objectName = '';
+    if (classIndex < 0) {
+      objectName = this.importTable[Math.abs(classIndex) - 1];
+    } else if (classIndex > 0) {
+      objectName = this.exportTable[classIndex]?.name;
+    }
+
+    return objectName;
   }
 }
 
@@ -198,15 +223,21 @@ class UePackageReader {
   }
 
   getUint16(): number {
-    const uint16 = this.dataView.getUint16(this.byteOffset, true);
+    const value = this.dataView.getUint16(this.byteOffset, true);
     this.byteOffset += 2;
-    return uint16;
+    return value;
+  }
+
+  getInt32(): number {
+    const value = this.dataView.getInt32(this.byteOffset, true);
+    this.byteOffset += 4;
+    return value;
   }
 
   getUint32(): number {
-    const uint32 = this.dataView.getUint32(this.byteOffset, true);
+    const value = this.dataView.getUint32(this.byteOffset, true);
     this.byteOffset += 4;
-    return uint32;
+    return value;
   }
 
   // Get a string and update the byte offset. The first 4 bytes are the string length.
