@@ -50,6 +50,7 @@ export default class UePackageReader {
       this,
       bloodPoolMaskExport?.serialOffset
     );
+    bloodPoolMask.blackOutTexture();
 
     console.log();
     console.log('bloodPoolMask.properties=', bloodPoolMask.properties);
@@ -63,7 +64,7 @@ export default class UePackageReader {
   readHeader() {
     const fileSignature = this.getUint8Array(4);
     invariant(
-      UePackageReader.compareUint8Arrays(
+      UePackageReader.areUint8ArraysEqual(
         fileSignature,
         new Uint8Array([0xc1, 0x83, 0x2a, 0x9e])
       ),
@@ -96,7 +97,7 @@ export default class UePackageReader {
   }
 
   // https://stackoverflow.com/a/19746771/399105
-  private static compareUint8Arrays = (
+  private static areUint8ArraysEqual = (
     array1: Uint8Array,
     array2: Uint8Array
   ): boolean => {
