@@ -8,7 +8,7 @@ import lzo from 'lzo';
 import { resolve } from 'path';
 import invariant from 'tiny-invariant';
 
-import { Ue3Package } from './Ue3Package';
+import Ue3Package from './Ue3Package';
 
 const main = async () => {
   if (process.argv.length !== 3) {

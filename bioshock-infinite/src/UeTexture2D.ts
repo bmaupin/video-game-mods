@@ -4,76 +4,58 @@ import UePackageReader from './UePackageReader';
 // way off 🤷‍♂️
 export default class UeTexture2D {
   private reader: UePackageReader;
-  // properties: {
-  //   [key: string]: string
-  // } = {};
-  // properties = {}
-  format = '';
-  sizeX = 0;
-  sizeY = 0;
-  textureFileCacheName = '';
+  properties: {
+    [key: string]: number | string | undefined;
+  } = {};
 
-  constructor(reader: UePackageReader) {
+  constructor(reader: UePackageReader, byteOffset: number) {
     this.reader = reader;
+    this.reader.byteOffset = byteOffset;
 
     this.readProperties();
+
+    // TODO: read mip maps
   }
 
   private readProperties() {
-    const _netIndex = this.reader.getUint32();
+    const _unknown = this.reader.getUint32();
 
     let propertyName = this.reader.getNameIndex();
     while (propertyName !== 'None') {
-      const value = this.readProperty(propertyName);
+      this.properties[propertyName] = this.readProperty();
 
       propertyName = this.reader.getNameIndex();
     }
   }
 
-  private readProperty(propertyName: string) {
+  private readProperty(): number | string | undefined {
     const propertyType = this.reader.getNameIndex();
+    const valueSize = this.reader.getInt32();
+    const _unknown = this.reader.getUint32();
 
     if (propertyType === 'ByteProperty') {
-      const valueSize = this.reader.getUint32();
-      const _unknown = this.reader.getUint32();
-      let value;
+      if (valueSize === 8) {
+        return `${this.reader.getNameIndex()}.${this.reader.getNameIndex()}`;
+      } else {
+        throw new Error('Unhandled ByteProperty value size');
+      }
+    }
+
+    //
+    else if (propertyType === 'IntProperty') {
       if (valueSize === 4) {
-        value = this.reader.getUint32();
-      }
-
-      if (value && propertyName === 'SizeX') {
-        this.sizeX = value;
-      }
-      if (value && propertyName === 'SizeY') {
-        this.sizeY = value;
+        return this.reader.getInt32();
+      } else {
+        throw new Error('Unhandled IntProperty value size');
       }
     }
 
-    if (propertyType === 'IntProperty') {
-      const valueSize = this.reader.getUint32();
-      const _unknown = this.reader.getUint32();
-
-      let value = '';
+    //
+    else if (propertyType === 'NameProperty') {
       if (valueSize === 8) {
-        value = `${this.reader.getNameIndex()}.${this.reader.getNameIndex()}`;
-      }
-
-      if (propertyName === 'Format') {
-        this.format = value;
-      }
-    }
-
-    if (propertyType === 'NameProperty') {
-      const valueSize = this.reader.getUint32();
-      const _unknown = this.reader.getUint32();
-
-      let value = '';
-      if (valueSize === 8) {
-        value = this.reader.getNameIndex();
-      }
-
-      if (propertyName === 'TextureFileCacheName') {
-        this.textureFileCacheName = value;
+        return this.reader.getNameIndex();
+      } else {
+        throw new Error('Unhandled NameProperty value size');
       }
     }
   }

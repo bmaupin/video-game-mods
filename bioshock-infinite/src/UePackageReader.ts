@@ -1,5 +1,6 @@
 import { it } from 'node:test';
 import invariant from 'tiny-invariant';
+import UeTexture2D from './UeTexture2D';
 
 export default class UePackageReader {
   private arrayBuffer: ArrayBuffer;
@@ -38,6 +39,20 @@ export default class UePackageReader {
     console.log('this.nameTable[1007]=', this.nameTable[1007]);
     console.log('this.nameTable[2237]=', this.nameTable[2237]);
     console.log('this.nameTable[3175]=', this.nameTable[3175]);
+
+    const bloodPoolMaskExport = this.exportTable.find(
+      (item) => item.name === 'BloodPool_MASK'
+    );
+
+    invariant(bloodPoolMaskExport?.className === 'Texture2D');
+
+    const bloodPoolMask = new UeTexture2D(
+      this,
+      bloodPoolMaskExport?.serialOffset
+    );
+
+    console.log();
+    console.log('bloodPoolMask.properties=', bloodPoolMask.properties);
   }
 
   private get fileVersion() {
