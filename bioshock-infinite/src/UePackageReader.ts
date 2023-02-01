@@ -218,6 +218,12 @@ export default class UePackageReader {
     this._byteOffset = newByteOffset;
   }
 
+  getBoolean(): boolean {
+    const value = this.dataView.getUint8(this.byteOffset);
+    this.byteOffset += 1;
+    return Boolean(value);
+  }
+
   getUint8Array(length: number): Uint8Array {
     const uintArray = new Uint8Array(this.arrayBuffer, this.byteOffset, length);
     this.byteOffset += length;

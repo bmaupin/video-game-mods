@@ -1,4 +1,3 @@
-import { readdir } from 'fs/promises';
 import { dirname, join } from 'path';
 import invariant from 'tiny-invariant';
 
@@ -10,7 +9,7 @@ import UeTextureFileCache from './UeTextureFileCache';
 export default class UeTexture2D {
   private reader: UePackageReader;
   properties: {
-    [key: string]: number | string | undefined;
+    [key: string]: boolean | number | string | undefined;
   } = {};
 
   constructor(reader: UePackageReader, byteOffset: number) {
@@ -93,7 +92,7 @@ export default class UeTexture2D {
     }
   }
 
-  private readProperty(): number | string | undefined {
+  private readProperty(): boolean | number | string | undefined {
     const propertyType = this.reader.getNameIndex();
     const valueSize = this.reader.getInt32();
     const _unknown = this.reader.getUint32();
@@ -104,6 +103,11 @@ export default class UeTexture2D {
       } else {
         throw new Error(`Unhandled ByteProperty value size: ${valueSize}`);
       }
+    }
+
+    //
+    else if (propertyType === 'BoolProperty') {
+      return Boolean(this.reader.getBoolean());
     }
 
     //
@@ -122,6 +126,11 @@ export default class UeTexture2D {
       } else {
         throw new Error(`Unhandled NameProperty value size: ${valueSize}`);
       }
+    }
+
+    //
+    else {
+      throw new Error(`Unhandled property type: ${propertyType}`);
     }
   }
 }
