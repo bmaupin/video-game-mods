@@ -266,6 +266,8 @@ export default class UePackageReader {
     const nameIndex = this.getUint32();
     let name = this.nameTable[nameIndex];
 
+    invariant(name !== undefined, 'Name is not undefined');
+
     if (this.fileVersion >= 343) {
       const nameNumber = this.getUint32() - 1;
       if (nameNumber > -1) {
@@ -286,5 +288,18 @@ export default class UePackageReader {
     }
 
     return objectName;
+  }
+
+  getExportTableEntry(objectName: string) {
+    const exportTableEntry = this.exportTable.find(
+      (item) => item.name === objectName
+    );
+
+    if (!exportTableEntry) {
+      console.log(`Object not found in export table: ${objectName}`);
+      return undefined;
+    }
+
+    return exportTableEntry;
   }
 }

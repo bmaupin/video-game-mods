@@ -1,8 +1,7 @@
 // Requires at least Node 10 for fs/promises
 // To run:
-// npx ts-node src/patch-tfc.ts ~/.steam/steam/steamapps/compatdata/2425643771/pfx/drive_c/GOG\ Games/BioShock\ Infinite/XGame/CookedPCConsole_FR/WorldTextures2.tfc 267881188 18733
+// npx ts-node src/patch-tfc.ts ~/.steam/steam/steamapps/common/BioShock\ Infinite/XGame/CookedPCConsole_FR/WorldTextures2.tfc 267881188 18733
 
-import { readFile } from 'fs/promises';
 // @ts-ignore
 import { resolve } from 'path';
 
@@ -19,17 +18,38 @@ const main = async () => {
 
   const gameDirectory = process.argv[2];
 
-  await readPackage(gameDirectory, 'S_Light_Geo.xxx');
+  await patchTextureMasks(gameDirectory, 'S_Light_Geo.xxx', [
+    'BloodPool_MASK',
+    'BloodSmear_MASK',
+  ]);
+  // For some reason S_Light_P.xxx has issues when it's extracted; use CoalescedItems.xxx instead
+  await patchTextureMasks(gameDirectory, 'CoalescedItems.xxx', [
+    'BloodSplat_MASK',
+  ]);
 };
 
-const readPackage = async (gameDirectory: string, packageFile: string) => {
+const patchTextureMasks = async (
+  gameDirectory: string,
+  packageFile: string,
+  texturesToPatch: string[]
+) => {
   // TODO
   // const PACKAGE_SUBDIRECTORY = 'XGame/CookedPCConsole_FR';
   const PACKAGE_SUBDIRECTORY = 'XGame/CookedPCConsole_FR/unpacked';
 
-  const unrealPackage = Ue3Package.fromFile(
+  const unrealPackage = await Ue3Package.fromFile(
     resolve(__dirname, gameDirectory, PACKAGE_SUBDIRECTORY, packageFile)
   );
+  for (const textureToPatch of texturesToPatch) {
+    const texture = unrealPackage.getTexture2D(textureToPatch);
+    if (!texture) {
+      throw new Error(`Texture not found: ${textureToPatch}`);
+    }
+
+    await texture.blackOutTexture();
+  }
 };
 
-main();
+main().catch((error) => {
+  console.error(error);
+});

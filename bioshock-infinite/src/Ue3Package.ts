@@ -1,6 +1,7 @@
 import { readFile } from 'fs/promises';
 
 import UePackageReader from './UePackageReader';
+import UeTexture2D from './UeTexture2D';
 
 // TODO: if we ever want to make this work with UE1/UE2 packages, we'll probably need
 //       to update many of the numeric values to be read using the compact index format
@@ -17,23 +18,23 @@ export default class Ue3Package {
     this.reader.populateNameTable();
     this.reader.populateImportTable();
     this.reader.populateExportTable();
-    // this.populateExportTable();
-
-    // // console.log('this.nameTable=', this.nameTable);
-    // // console.log('this.importTable=', this.importTable);
-    // console.log('this.exportTable=', this.reader.exportTable.slice(0, 10));
-    // // console.log('this.exportTable=', this.exportTable);
-
-    // console.log(
-    //   "getObject('BloodPool_MASK')=",
-    //   this.getObject('BloodPool_MASK')
-    // );
-
-    this.reader.debug();
   }
 
   static async fromFile(filePath: string): Promise<Ue3Package> {
     const arrayBuffer = (await readFile(filePath)).buffer;
     return new Ue3Package(arrayBuffer, filePath);
+  }
+
+  getTexture2D(textureName: string): UeTexture2D | undefined {
+    const textureExportEntry = this.reader.getExportTableEntry(textureName);
+
+    if (textureExportEntry?.className !== 'Texture2D') {
+      console.debug('textureExportEntry=', textureExportEntry);
+      throw new Error(
+        `Object class for ${textureName} is ${textureExportEntry?.className}; expected Texture2D`
+      );
+    }
+
+    return new UeTexture2D(this.reader, textureExportEntry?.serialOffset);
   }
 }
