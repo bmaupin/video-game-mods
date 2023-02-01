@@ -1,10 +1,13 @@
 import { it } from 'node:test';
 import invariant from 'tiny-invariant';
 import UeTexture2D from './UeTexture2D';
+import { areUint8ArraysEqual } from './utils';
 
 export default class UePackageReader {
   private arrayBuffer: ArrayBuffer;
   private dataView: DataView;
+  filePath: string;
+
   private exportTable: {
     className: string;
     name: string;
@@ -23,9 +26,10 @@ export default class UePackageReader {
   private _byteOffset: number = 0;
   private _fileVersion: number = 0;
 
-  constructor(arrayBuffer: ArrayBuffer) {
+  constructor(arrayBuffer: ArrayBuffer, filePath: string) {
     this.arrayBuffer = arrayBuffer;
     this.dataView = new DataView(this.arrayBuffer);
+    this.filePath = filePath;
   }
 
   debug() {
@@ -64,7 +68,7 @@ export default class UePackageReader {
   readHeader() {
     const fileSignature = this.getUint8Array(4);
     invariant(
-      UePackageReader.areUint8ArraysEqual(
+      areUint8ArraysEqual(
         fileSignature,
         new Uint8Array([0xc1, 0x83, 0x2a, 0x9e])
       ),
@@ -95,19 +99,6 @@ export default class UePackageReader {
     this.importTableCount = this.getUint32();
     this.importTableOffset = this.getUint32();
   }
-
-  // https://stackoverflow.com/a/19746771/399105
-  private static areUint8ArraysEqual = (
-    array1: Uint8Array,
-    array2: Uint8Array
-  ): boolean => {
-    return (
-      array1.length === array2.length &&
-      array1.every(function (value, index: number) {
-        return value === array2[index];
-      })
-    );
-  };
 
   populateNameTable() {
     const oldByteOffset = this.byteOffset;

@@ -1,6 +1,9 @@
+import { readdir } from 'fs/promises';
+import { dirname, join } from 'path';
 import invariant from 'tiny-invariant';
 
 import UePackageReader from './UePackageReader';
+import UeTextureFileCache from './UeTextureFileCache';
 
 // This was mostly put together by observing an object using UE Explorer; it's probably
 // way off 🤷‍♂️
@@ -17,7 +20,7 @@ export default class UeTexture2D {
     this.readProperties();
   }
 
-  blackOutTexture() {
+  async blackOutTexture() {
     if (this.properties.Format !== 'EPixelFormat.PF_DXT1') {
       throw new Error(`Unhandled format: ${this.properties.Format}`);
     }
@@ -27,12 +30,29 @@ export default class UeTexture2D {
     for (let i = 0; i < numMipMaps; i++) {
       const flags = this.reader.getUint32();
       const isMipMapExternal = flags & 1;
-      const uncompressedSize = this.reader.getUint32();
+      const _uncompressedSize = this.reader.getUint32();
       const compressedSize = this.reader.getUint32();
       const byteOffset = this.reader.getUint32();
 
       if (isMipMapExternal) {
-        // TODO
+        invariant(
+          Object.keys(this.properties).includes('TextureFileCacheName'),
+          'TextureFileCacheName is defined when texture has external mipmaps'
+        );
+
+        const tfcFileName = this.properties.TextureFileCacheName + '.tfc';
+        let tfcDirPath = dirname(this.reader.filePath);
+        // TODO: this is a hack until we can deal with compressed package files directly
+        if (tfcDirPath.endsWith('/unpacked')) {
+          tfcDirPath = tfcDirPath.replace('/unpacked', '');
+        }
+        const tfcFilePath = join(tfcDirPath, tfcFileName);
+
+        UeTextureFileCache.blackOutMipMap(
+          tfcFilePath,
+          byteOffset,
+          compressedSize
+        );
       }
 
       //

@@ -1,4 +1,4 @@
-import invariant from 'tiny-invariant';
+import { readFile } from 'fs/promises';
 
 import UePackageReader from './UePackageReader';
 
@@ -9,9 +9,9 @@ export default class Ue3Package {
   private arrayBuffer: ArrayBuffer;
   private reader: UePackageReader;
 
-  constructor(arrayBuffer: ArrayBuffer) {
+  constructor(arrayBuffer: ArrayBuffer, filePath: string) {
     this.arrayBuffer = arrayBuffer;
-    this.reader = new UePackageReader(this.arrayBuffer);
+    this.reader = new UePackageReader(this.arrayBuffer, filePath);
 
     this.reader.readHeader();
     this.reader.populateNameTable();
@@ -32,9 +32,8 @@ export default class Ue3Package {
     this.reader.debug();
   }
 
-  // getObject(name: string) {
-  //   return this.exportTable.filter((item) =>
-  //     item.name?.toLowerCase().startsWith(name.toLowerCase())
-  //   );
-  // }
+  static async fromFile(filePath: string): Promise<Ue3Package> {
+    const arrayBuffer = (await readFile(filePath)).buffer;
+    return new Ue3Package(arrayBuffer, filePath);
+  }
 }
