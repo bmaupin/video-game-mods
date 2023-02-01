@@ -48,7 +48,7 @@ export default class UeTexture2D {
         }
         const tfcFilePath = join(tfcDirPath, tfcFileName);
 
-        UeTextureFileCache.blackOutMipMap(
+        await UeTextureFileCache.blackOutMipMap(
           tfcFilePath,
           byteOffset,
           compressedSize

@@ -104,7 +104,7 @@ export default class UePackageReader {
     const oldByteOffset = this.byteOffset;
     this.byteOffset = this.nameTableOffset;
 
-    for (let i = 0; i <= this.nameTableCount; i++) {
+    for (let i = 0; i < this.nameTableCount; i++) {
       this.nameTable[i] = this.getString();
       if (this.fileVersion < 141) {
         const _nameFlags = this.getUint8Array(4);
@@ -123,7 +123,7 @@ export default class UePackageReader {
     const oldByteOffset = this.byteOffset;
     this.byteOffset = this.importTableOffset;
 
-    for (let i = 0; i <= this.importTableCount; i++) {
+    for (let i = 0; i < this.importTableCount; i++) {
       const _packageName = this.getNameIndex();
       const _className = this.getNameIndex();
       const _outerIndex = this.getUint32();
@@ -138,11 +138,21 @@ export default class UePackageReader {
   }
 
   // TODO: 0x1c173
+  // https://github.com/gildor2/UEViewer/blob/eaba2837228f9fe39134616d7bff734acd314ffb/Unreal/UnrealPackage/UnPackage.h
+
+  // References:
+  // - UEViewer
+  //   - UnPackage.cpp LoadExportTable uses << operator overloading
+  //   - Overload is in UnPackage.cpp which points to FObjectExport::Serialize3 in UnPackage3.cpp
+  //     https://github.com/gildor2/UEViewer/blob/master/Unreal/UnrealPackage/UnPackage3.cpp#L312
+  //   - Types are defined here: https://github.com/gildor2/UEViewer/blob/eaba2837228f9fe39134616d7bff734acd314ffb/Unreal/UnrealPackage/UnPackage.h#L176
   populateExportTable() {
     const oldByteOffset = this.byteOffset;
     this.byteOffset = this.exportTableOffset;
 
-    for (let i = 0; i <= this.exportTableCount; i++) {
+    for (let i = 0; i < this.exportTableCount; i++) {
+      const byteOffset = this.byteOffset;
+
       const className = this.getObjectIndex();
       const _superIndex = this.getInt32();
       const _outerIndex = this.getInt32();
@@ -159,13 +169,29 @@ export default class UePackageReader {
 
       const serialSize = this.getUint32();
       let serialOffset = 0;
-      if (serialSize > 0 || this.fileVersion > 249) {
+      if (serialSize > 0 || this.fileVersion >= 249) {
         serialOffset = this.getUint32();
+
+        invariant(serialOffset > 0, 'Serial offset is greater than 0');
       }
 
-      // TODO
-      const _unknown1 = this.getUint32();
-      const _unknown2 = this.getUint32();
+      if (this.fileVersion >= 220) {
+        const _exportFlags = this.getUint32();
+      }
+
+      // TODO: This seems to be specific to BioShock Infinite
+      const _flag = this.getUint32();
+      if (Boolean(_flag)) {
+        if (this.fileVersion >= 322) {
+          const _netObjectCount = this.getUint32();
+          // Net object count is an array
+          this.byteOffset += _netObjectCount * 4;
+          const _guid = this.getUint8Array(16);
+        }
+        if (this.fileVersion >= 475) {
+          const _unknown = this.getUint32();
+        }
+      }
 
       this.exportTable[i] = {
         className,
