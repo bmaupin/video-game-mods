@@ -12,6 +12,16 @@
 - Umodel
 - UE Explorer
 
+#### Unreal package format
+
+- [http://www.hypercoop.tk/infobase/archive/unrealtech/Packages.htm](http://www.hypercoop.tk/infobase/archive/unrealtech/Packages.htm) (Official UE1 documentation)
+- [http://eliotvu.com/page/unreal-package-file-format](http://eliotvu.com/page/unreal-package-file-format) (UE1 - UE3)
+- [https://wiki.beyondunreal.com/Unreal_package](https://wiki.beyondunreal.com/Unreal_package) (UE1 - UE3)
+- [https://bunnytrack.net/ut-package-format/](https://bunnytrack.net/ut-package-format/) (UE1)
+- [https://www.gildor.org/smf/index.php?topic=1278.15](https://www.gildor.org/smf/index.php?topic=1278.15)
+- [https://github.com/bunnytrack/UTPackage.js/](https://github.com/bunnytrack/UTPackage.js/) (UE1)
+- [https://github.com/wghost/UPKUtils/blob/master/UPKInfo.cpp](https://github.com/wghost/UPKUtils/blob/master/UPKInfo.cpp) (UE3)
+
 #### UE3 Texture File Cache (`.tfc`) files
 
 - Official documentation: [UDK | Content Cooking](https://docs.unrealengine.com/udk/Three/ContentCooking.html)
@@ -21,6 +31,25 @@
 - Code
   - https://github.com/gildor2/UEViewer/blob/f6c2294366cf18bbd2428cdadd2a4b0d9ecff8d3/Unreal/UnrealPackage/UnPackageReader.cpp#L410
   - https://github.com/wghost/UPKUtils/blob/master/UPKInfo.cpp
+
+#### Approach
+
+- Static objects are represented by [Materials](https://docs.unrealengine.com/udk/Three/MaterialsOverview.html)
+- At first I thought we should modify the material transparency, but it appears that masking is actually what I'm looking for to prevent a texture from being rendered altogether:
+
+  > It is important to keep in mind the difference between transparent and not rendered. A transparent surface, such as glass, still interacts with light in the form of reflections (specularity). Pixels that are culled in Masked mode simply do not draw; you will not see any reflections in those areas.
+
+  ([Material Blend Modes | Unreal Engine Documentation](https://docs.unrealengine.com/4.26/en-US/RenderingAndGraphics/Materials/MaterialProperties/BlendModes/))
+
+  - UE3 documentation: [UDK | MaterialBasics](https://docs.unrealengine.com/udk/Three/MaterialBasics.html#Masked%20Material)
+
+- It looks like for the lighthouse level, the blood pool/splatter have associated materials which have associated masks. By editing the masks, it seems like we can make those materials not show up at all.
+- It seems that other textures associated with the material can be ignored, e.g.
+
+  - `_D`: diffuse map
+  - `_N`: normal map
+
+  (see [UDK | Creating Textures](https://docs.unrealengine.com/udk/Three/CreatingTextures.html))
 
 #### Steps
 
