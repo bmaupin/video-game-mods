@@ -25,7 +25,7 @@ export default class Ue3Package {
     return new Ue3Package(arrayBuffer, filePath);
   }
 
-  getTexture2D(textureName: string): UeTexture2D | undefined {
+  getTexture2D(textureName: string): UeTexture2D {
     const textureExportEntry = this.reader.getExportTableEntry(textureName);
 
     if (textureExportEntry?.className !== 'Texture2D') {

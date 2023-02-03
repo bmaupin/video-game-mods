@@ -22,10 +22,7 @@ const main = async () => {
     'BloodPool_MASK',
     'BloodSmear_MASK',
   ]);
-  // For some reason S_Light_P.xxx has issues when it's extracted; use CoalescedItems.xxx instead
-  await patchTextureMasks(gameDirectory, 'CoalescedItems.xxx', [
-    'BloodSplat_MASK',
-  ]);
+  await patchTextureMasks(gameDirectory, 'S_Light_P.xxx', ['BloodSplat_MASK']);
 };
 
 const patchTextureMasks = async (
@@ -41,12 +38,7 @@ const patchTextureMasks = async (
     resolve(__dirname, gameDirectory, PACKAGE_SUBDIRECTORY, packageFile)
   );
   for (const textureToPatch of texturesToPatch) {
-    const texture = unrealPackage.getTexture2D(textureToPatch);
-    if (!texture) {
-      throw new Error(`Texture not found: ${textureToPatch}`);
-    }
-
-    await texture.blackOutTexture();
+    await unrealPackage.getTexture2D(textureToPatch).blackOutTexture();
   }
 };
 
