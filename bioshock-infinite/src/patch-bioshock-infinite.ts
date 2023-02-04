@@ -22,7 +22,16 @@ const main = async () => {
     'BloodPool_MASK',
     'BloodSmear_MASK',
   ]);
-  await patchTextureMasks(gameDirectory, 'S_Light_P.xxx', ['BloodSplat_MASK']);
+  await patchTextureMasks(gameDirectory, 'S_TWN_Lottery_Game.xxx', [
+    'Blood_MASK',
+    'BloodDecal_MASK',
+    'BloodMist_MASK',
+    'BloodSplat_MASK',
+    // TODO: Error: Invariant failed: Compressed chunk block size should be the same as compressed chunk size
+    //       maybe it has multiple chunks?
+    // 'Skyhook_FaceHit_Blood_1_Mask',
+    // 'Skyhook_FaceHit_Blood_2_Mask',
+  ]);
 };
 
 const patchTextureMasks = async (
@@ -38,6 +47,7 @@ const patchTextureMasks = async (
     resolve(__dirname, gameDirectory, PACKAGE_SUBDIRECTORY, packageFile)
   );
   for (const textureToPatch of texturesToPatch) {
+    console.log(`Patching texture ${textureToPatch}`);
     await unrealPackage.getTexture2D(textureToPatch).blackOutTexture();
   }
 };

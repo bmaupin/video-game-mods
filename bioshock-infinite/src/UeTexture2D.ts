@@ -20,7 +20,10 @@ export default class UeTexture2D {
   }
 
   async blackOutTexture() {
-    if (this.properties.Format !== 'EPixelFormat.PF_DXT1') {
+    if (
+      this.properties.Format !== 'EPixelFormat.PF_DXT1' &&
+      this.properties.Format !== 'EPixelFormat.PF_DXT5'
+    ) {
       throw new Error(`Unhandled format: ${this.properties.Format}`);
     }
 
@@ -47,10 +50,18 @@ export default class UeTexture2D {
         }
         const tfcFilePath = join(tfcDirPath, tfcFileName);
 
+        // TODO: remove this? it's useful for development
+        console.log('Patching TFC: ', {
+          tfcFilePath,
+          byteOffset,
+          compressedSize,
+        });
+
         await UeTextureFileCache.blackOutMipMap(
           tfcFilePath,
           byteOffset,
-          compressedSize
+          compressedSize,
+          this.properties.Format
         );
       }
 

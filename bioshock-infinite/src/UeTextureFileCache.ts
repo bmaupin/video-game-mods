@@ -10,7 +10,8 @@ export default class UeTextureFileCache {
   static blackOutMipMap = async (
     tfcFilePath: string,
     startingByte: number,
-    byteLength: number
+    byteLength: number,
+    textureFormat: string
   ) => {
     const arrayBuffer = (await readFile(resolve(__dirname, tfcFilePath)))
       .buffer;
@@ -22,14 +23,23 @@ export default class UeTextureFileCache {
         byteLength
       );
 
-    const newCompressedChunkBlock = UeTextureFileCache.generateBlackDxt1(
-      decompressedChunkBlockSize
-    );
+    let newCompressedChunkBlock;
+
+    if (textureFormat === 'EPixelFormat.PF_DXT1') {
+      newCompressedChunkBlock = UeTextureFileCache.generateBlackDxt1(
+        decompressedChunkBlockSize
+      );
+    } else if (textureFormat === 'EPixelFormat.PF_DXT5') {
+      newCompressedChunkBlock = UeTextureFileCache.generateBlackDxt5(
+        decompressedChunkBlockSize
+      );
+    }
     invariant(
       newCompressedChunkBlock.length <= oldCompressedChunkBlockSize,
       'New compressed chunk block should be equal to or smaller than original compressed chunk block'
     );
 
+    // TODO: remove this
     await writeFile(
       resolve(process.cwd(), 'compressed-raw-dds.bin'),
       newCompressedChunkBlock
@@ -94,6 +104,16 @@ export default class UeTextureFileCache {
     const uint8array = new Uint8Array(decompressedLength);
 
     for (let byte = 4; byte < decompressedLength; byte += 8) {
+      uint8array.set([0xaa, 0xaa, 0xaa, 0xaa], byte);
+    }
+
+    return lzo.compress(uint8array);
+  };
+
+  private static generateBlackDxt5 = (decompressedLength: number) => {
+    const uint8array = new Uint8Array(decompressedLength);
+
+    for (let byte = 12; byte < decompressedLength; byte += 16) {
       uint8array.set([0xaa, 0xaa, 0xaa, 0xaa], byte);
     }
 
