@@ -1,6 +1,6 @@
 // Requires at least Node 10 for fs/promises
 // To run:
-// npx ts-node src/patch-tfc.ts ~/.steam/steam/steamapps/common/BioShock\ Infinite/XGame/CookedPCConsole_FR/WorldTextures2.tfc 267881188 18733
+// npx ts-node src/patch-bioshock-infinite.ts ~/.steam/steam/steamapps/common/BioShock\ Infinite/XGame/CookedPCConsole_FR/WorldTextures2.tfc 267881188 18733
 
 // @ts-ignore
 import { resolve } from 'path';
@@ -22,15 +22,17 @@ const main = async () => {
     'BloodPool_MASK',
     'BloodSmear_MASK',
   ]);
-  await patchTextureMasks(gameDirectory, 'S_TWN_Lottery_Game.xxx', [
+  await patchTextureMasks(gameDirectory, 'S_TWN_Lottery_Game2.xxx', [
     'Blood_MASK',
     'BloodDecal_MASK',
     'BloodMist_MASK',
     'BloodSplat_MASK',
-    // TODO: Error: Invariant failed: Compressed chunk block size should be the same as compressed chunk size
-    //       maybe it has multiple chunks?
-    // 'Skyhook_FaceHit_Blood_1_Mask',
-    // 'Skyhook_FaceHit_Blood_2_Mask',
+    'BloodSpray_MASK',
+    // 'DecapBloodRibbon_MASK',
+    // 'headgore_MASK',
+    'LottoCopGoreB_MASK',
+    'Skyhook_FaceHit_Blood_1_Mask',
+    'Skyhook_FaceHit_Blood_2_Mask',
   ]);
 };
 
