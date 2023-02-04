@@ -4,8 +4,17 @@
 
 #### List objects in package files
 
+e.g.
+
 ```
-for file in *.xxx; do echo; echo "$file"; umodel -list "$file" | grep -i blood; done > blood.txt
+for file in *.xxx; do
+  results=$(umodel -list "$file" | egrep -i "blood|gibs|gore" | grep -i mask)
+  if [ -n "$results" ]; then
+    echo "$file"
+    echo "$results"
+    echo
+  fi
+done
 ```
 
 #### Find the byte offset of an object

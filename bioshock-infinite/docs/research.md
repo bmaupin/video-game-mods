@@ -102,6 +102,43 @@
 
    - The uncompressed package file will contain the uncompressed raw image
 
+1. Create a black texture for testing
+
+   1. Open a file in umodel, e.g.
+
+      ```
+      umodel -view S_TWN_Lottery_Game.xxx
+      ```
+
+   1. Find a texture with black edges in the format you need and export it, e.g.
+
+      ```
+      umodel -export -dds S_TWN_Lottery_Game.xxx HitspangDust_Dif
+      ```
+
+   1. Read the file starting at byte 0x80 to see the pattern
+
+   1. Extract the header
+
+      ```
+      dd if=HitspangDust_Dif.dds of=test-dxt5-header.bin bs=1 count=128
+      ```
+
+   1. Generate a test file, e.g.
+
+      ```
+      npx ts-node scripts/generate-dxt5.ts
+      ```
+
+   1. Combine the test file and the header
+
+      ```
+      cat test-dxt5-header.bin > test-dxt5.dds
+      cat test-dxt5.bin >> test-dxt5.dds
+      ```
+
+   1. Open with GIMP just to make sure it works
+
 ## Patches
 
 #### Lighthouse
