@@ -18,15 +18,18 @@ const main = async () => {
 
   const gameDirectory = process.argv[2];
 
+  // First level (lighthouse)
   await patchTextureMasks(gameDirectory, 'S_Light_Geo.xxx', [
     'BloodPool_MASK',
     'BloodSmear_MASK',
   ]);
+  await patchTextureMasks(gameDirectory, 'S_Light_P.xxx', ['BloodSplat_MASK']);
+
+  // Town raffle; work in progress
   await patchTextureMasks(gameDirectory, 'S_TWN_Lottery_Game2.xxx', [
     'Blood_MASK',
     'BloodDecal_MASK',
     'BloodMist_MASK',
-    'BloodSplat_MASK',
     'BloodSpray_MASK',
     // 'DecapBloodRibbon_MASK',
     // 'headgore_MASK',
