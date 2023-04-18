@@ -56,6 +56,8 @@ bAllowDownsampledTranslucency
 
 1. Use game mode
 
+   ⚠ I've actually seen game mode significantly reduce FPS in at least one game. Make sure to try with and without game mode to see if it helps.
+
    1. Set the game launch properties to `gamemoderun %command%`
 
       If you see this error:
