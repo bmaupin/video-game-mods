@@ -4,11 +4,9 @@
 
 1. In Steam, install _Sid Meier's Civilization IV: Beyond the Sword_
 1. Right-click the game > _Properties_ > _Betas_ > select _original_release_unsupported_
-1. Still in the game properties, go to _General_ and set _Launch Options_ to (to prevent graphical flickering):
+1. In the Steam client, go to the game and click the ⓘ icon to see which version of Proton is used
 
-   ```
-   PROTON_USE_WINED3D=1 %command%
-   ```
+   - Make sure it's at least Proton 8, otherwise you'll need to use workarounds to fix graphical glitches
 
 1. In game, set graphical options
 
@@ -31,10 +29,10 @@
 1. Run the mod main installer
 
    ```
-   STEAM_COMPAT_DATA_PATH="/home/$USER/.local/share/Steam/steamapps/compatdata/8800" STEAM_COMPAT_CLIENT_INSTALL_PATH="/home/$USER/.local/share/Steam" "$HOME/.local/share/Steam/steamapps/common/Proton 7.0"/proton waitforexitandrun Planetfall_v16_Main.exe
+   STEAM_COMPAT_DATA_PATH="/home/$USER/.local/share/Steam/steamapps/compatdata/8800" STEAM_COMPAT_CLIENT_INSTALL_PATH="/home/$USER/.local/share/Steam" "$HOME/.local/share/Steam/steamapps/common/Proton 8.0"/proton waitforexitandrun Planetfall_v16_Main.exe
    ```
 
-   (Adjust `Proton 7.0` as needed)
+   (Adjust `Proton 8.0` as needed)
 
    1. In the installer, browse to your **Sid Meier's Civilization IV Beyond the Sword\Beyond the Sword** directory, e.g. Z:\home\user\.local\share\Steam\steamapps\common\Sid Meier's Civilization IV Beyond the Sword\Beyond the Sword\
 
@@ -43,11 +41,11 @@
 1. Run the mod patch installer
 
    ```
-   STEAM_COMPAT_DATA_PATH="/home/$USER/.local/share/Steam/steamapps/compatdata/8800" STEAM_COMPAT_CLIENT_INSTALL_PATH="/home/$USER/.local/share/Steam" "$HOME/.local/share/Steam/steamapps/common/Proton 7.0"/proton waitforexitandrun Planetfall_v16f_Patch.exe
+   STEAM_COMPAT_DATA_PATH="/home/$USER/.local/share/Steam/steamapps/compatdata/8800" STEAM_COMPAT_CLIENT_INSTALL_PATH="/home/$USER/.local/share/Steam" "$HOME/.local/share/Steam/steamapps/common/Proton 8.0"/proton waitforexitandrun Planetfall_v16f_Patch.exe
    ```
 
 1. (Optional) To launch Planetfall directly when starting Civ IV, right-click the game in the Steam client > _Properties_ and set _Launch Options_ to
 
    ```
-   PROTON_USE_WINED3D=1  %command% "mod=\\Planetfall v16"
+   %command% "mod=\\Planetfall v16"
    ```
