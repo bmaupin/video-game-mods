@@ -15,6 +15,32 @@
    1. Gradually increase antialiasing until it starts affecting framerate
    1. Exit the game
 
+#### Install [Dune Wars](https://forums.civfanatics.com/resources/dune-wars-revival-villeneuve-inspired-patch.28465/) mod on Proton
+
+1. Download DuneWars Revival v1.10 from here: [https://www.moddb.com/mods/dune-wars/downloads/dunewars-revival-v110](https://www.moddb.com/mods/dune-wars/downloads/dunewars-revival-v110)
+
+1. Extract it and move it to the mods directory
+
+   ```
+   unzip DuneWars_Revival-v.1.10.zip
+   mv DuneWars\ Revival/ ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/
+   ```
+
+1. Download the latest VIP update from here: [https://forums.civfanatics.com/resources/dune-wars-revival-villeneuve-inspired-patch.28465/updates#resource-update-32832] > _Go to download_
+
+1. Extract it and overwrite the DuneWars Revival mods directory
+
+   ```
+   unzip DuneWarsRevival_VilleneuveInspiredPatch-dwr-vip-5.7.zip
+   cp -av DuneWarsRevival_VilleneuveInspiredPatch-dwr-vip-5.7/DuneWars\ Revival/ ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/
+   ```
+
+1. (Optional) To launch Dune Wars directly when starting Civ IV, right-click the game in the Steam client > _Properties_ and set _Launch Options_ to
+
+   ```
+   %command% "mod=\\DuneWars Revival"
+   ```
+
 #### Install [Planetfall](https://forums.civfanatics.com/threads/download-thread.253775/) mod on Proton
 
 1. Download Planetfall from here: https://forums.civfanatics.com/threads/download-thread.253775/
