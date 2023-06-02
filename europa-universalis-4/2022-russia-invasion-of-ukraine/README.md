@@ -13,3 +13,5 @@ Some small tweaks to the [Extended Timeline](https://steamcommunity.com/sharedfi
    ```
 
 1. Start a new game, setting the date to 2022-02-24 or later
+
+   The changes won't show until the game is started, so you won't see changes (for example, to a ruler) when choosing a nation.
