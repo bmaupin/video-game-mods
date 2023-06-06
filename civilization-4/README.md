@@ -26,6 +26,13 @@
    mv DuneWars\ Revival/ ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/
    ```
 
+1. Change the case of a couple directories so they'll be properly overwritten
+
+   ```
+   mv ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/DuneWars\ Revival/Assets/Sounds/soundtrack/ ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/DuneWars\ Revival/Assets/Sounds/Soundtrack
+   mv ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/DuneWars\ Revival/Assets/XML/GameInfo/ ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/DuneWars\ Revival/Assets/XML/Gameinfo
+   ```
+
 1. Download the latest VIP update from here: [https://forums.civfanatics.com/resources/dune-wars-revival-villeneuve-inspired-patch.28465/updates#resource-update-32832] > _Go to download_
 
 1. Extract it and overwrite the DuneWars Revival mods directory
