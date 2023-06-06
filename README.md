@@ -54,6 +54,14 @@ bAllowDownsampledTranslucency
 
 #### Proton performance tips
 
+1. Try a newer version of Proton
+
+1. Try [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom)
+
+1. Try [`DXVK_ASYNC=1`](https://github.com/GloriousEggroll/proton-ge-custom#modification)
+
+   (Requires Proton GE, version 7.44 or earlier as it was removed from Proton GE 7.45+)
+
 1. Use game mode
 
    ⚠ I've actually seen game mode significantly reduce FPS in at least one game. Make sure to try with and without game mode to see if it helps.
@@ -74,8 +82,6 @@ bAllowDownsampledTranslucency
 
 1. Check [ProtonDB](https://www.protondb.com/) to see if there are any tips on improving performance
 
-1. Try a newer version of Proton
-
 1. Check the [Github Proton repository](https://github.com/ValveSoftware/Proton/issues) to see if there's an issue for the game that might have suggestions on improving performance
 
 1. Check logs
@@ -95,10 +101,6 @@ bAllowDownsampledTranslucency
 1. Install fsync-compatible kernel
 
    Make sure you're using kernel 5.16 or later
-
-1. Try [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom)
-
-1. Try [`DXVK_ASYNC=1`](https://github.com/GloriousEggroll/proton-ge-custom#modification)
 
 1. Try an older version of DirectX
 
