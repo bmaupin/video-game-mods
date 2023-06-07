@@ -58,6 +58,8 @@ bAllowDownsampledTranslucency
 
 1. Try [Proton GE](https://github.com/GloriousEggroll/proton-ge-custom)
 
+   - Proton GE 7 or earlier in particular is useful if you end up having to set the game to a low resolution as it has FSR enabled out of the box, which will upscale with relatively little to no performance impact.
+
 1. Try [`DXVK_ASYNC=1`](https://github.com/GloriousEggroll/proton-ge-custom#modification)
 
    (Requires Proton GE, version 7.44 or earlier as it was removed from Proton GE 7.45+)
