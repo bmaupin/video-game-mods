@@ -66,7 +66,7 @@ bAllowDownsampledTranslucency
 
 1. Use game mode
 
-   ⚠ I've actually seen game mode significantly reduce FPS in at least one game. Make sure to try with and without game mode to see if it helps.
+   ⚠ Depending how game mod is configured, it may end up reducing performance, sometimes significantly. See below for more information. Also, be sure to try with and without game mode to see if it actually improves performance.
 
    1. Set the game launch properties to `gamemoderun %command%`
 
@@ -78,9 +78,17 @@ bAllowDownsampledTranslucency
 
       Try this instead: `LD_PRELOAD="$LD_PRELOAD:/usr/\$LIB/libgamemode.so.0" gamemoderun %command%`
 
-   1. Tweak game mode
+   1. Configure game mode
 
-      See [https://github.com/FeralInteractive/gamemode#configuration](https://github.com/FeralInteractive/gamemode#configuration)
+      - See [https://github.com/FeralInteractive/gamemode#configuration](https://github.com/FeralInteractive/gamemode#configuration)
+
+      - Some recommendations for integrated Intel graphics:
+
+        - `desiredgov=powersave`
+        - `igpu_desiredgov=powersave`
+        - `igpu_power_threshold=-1`
+
+      ⚠ Make sure you use `;` to comment lines as `#` may have no effect
 
 1. Check [ProtonDB](https://www.protondb.com/) to see if there are any tips on improving performance
 
