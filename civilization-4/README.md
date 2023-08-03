@@ -33,14 +33,22 @@
    mv ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/DuneWars\ Revival/Assets/XML/GameInfo/ ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/DuneWars\ Revival/Assets/XML/Gameinfo
    ```
 
-1. Download the latest VIP update from here: [https://forums.civfanatics.com/resources/dune-wars-revival-villeneuve-inspired-patch.28465/updates#resource-update-32832] > _Go to download_
+1. Download the latest VIP update from here: [https://forums.civfanatics.com/resources/dune-wars-revival-villeneuve-inspired-patch.28465/updates](https://forums.civfanatics.com/resources/dune-wars-revival-villeneuve-inspired-patch.28465/updates) > _Go to download_
 
 1. Extract it and overwrite the DuneWars Revival mods directory
 
    ```
-   unzip DuneWarsRevival_VilleneuveInspiredPatch-dwr-vip-5.7.zip
-   cp -av DuneWarsRevival_VilleneuveInspiredPatch-dwr-vip-5.7/DuneWars\ Revival/ ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/
+   unzip DuneWarsRevival_VilleneuveInspiredPatch-dwr-vip-5.8.zip
+   cp -av DuneWarsRevival_VilleneuveInspiredPatch-dwr-vip-5.8/DuneWars\ Revival/ ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/
    ```
+
+1. (Optional) Double-check that there are no duplicate files with different case
+
+   ```
+   find ~/.steam/steam/steamapps/common/Sid\ Meier\'s\ Civilization\ IV\ Beyond\ the\ Sword/Beyond\ the\ Sword/Mods/ | sort -f | uniq -i -d
+   ```
+
+   (Source: [How to find duplicate files with same name but in different case that exist in same directory in Linux?](https://stackoverflow.com/a/6705008/399105))
 
 1. (Optional) To launch Dune Wars directly when starting Civ IV, right-click the game in the Steam client > _Properties_ and set _Launch Options_ to
 
