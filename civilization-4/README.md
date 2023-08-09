@@ -52,9 +52,9 @@ These options only apply to one specific game and can only be set before the gam
 
    1. Set the map _Size_
       - This has the biggest impact on game length; a smaller map will mean a much quicker game
-      - Even the _Dual_ map size is surprisingly large; in a game with 5 other civs I was able to build half a dozen cities
+      - Even the _Duel_ map size is surprisingly large; in a game with 5 other civs I was able to build half a dozen cities
    1. Add as many civilizations as you'd like
-      - Even in a _Duel_ map you can easily play with 5 or more civilizations (including yourself)
+      - Even in a _Duel_ map you can easily fit 5 or more players on the map (**note** that this doesn't apply if you mod the map sizes as described below)
    1. Set _Speed_ to _Quick_
    1. Under _Options_, check these:
       - _No City Razing_
@@ -69,6 +69,63 @@ These options only apply to one specific game and can only be set before the gam
         - One less unit to worry about
    1. Under _Victories_, turn off any victory conditions you don't want to worry about
    1. Don't forget to set the difficulty
+
+#### Modding map sizes
+
+ⓘ This is a pretty extreme measure, but from my experience, the map size is the single biggest factor when it comes to game length. Without this, even after following all of the above steps, a game with the duel map (the smallest map size) on quick speed can take over 7 hours. That same game can be reduced to 1 hour if the map size is reduced sufficiently.
+
+1. First, modify the global map sizes
+
+   1. Modify `Assets/XML/GameInfo/CIV4WorldInfo.xml`
+
+      - e.g. for Beyond the Sword, modify `Beyond the Sword/Assets/XML/GameInfo/CIV4WorldInfo.xml`
+      - e.g. for Planetfall, modify `Beyond the Sword/Mods/Planetfall v16/Assets/XML/GameInfo/CIV4WorldInfo.xml`
+      - For Dune Wars, see below
+
+   1. Modify `iGridWidth`/`iGridHeight` for each map size
+
+      - My recommendation: change the grid sizes (X and Y) to 3/4/5/6/7/8 respectively for each of the different map sizes, e.g. for duel:
+
+        ```xml
+        <iGridWidth>3</iGridWidth>
+        <iGridHeight>3</iGridHeight>
+        ```
+
+        Each grid is 4 tiles; this will result in a map of 12 x 12 tiles (the default size for duel maps is 40 x 24 tiles)
+
+1. If that doesn't work for a particular map, you may also need to modify `getGridSize` in the map script
+
+   - e.g. for the Dune Wars Arrakis map, `modify Beyond the Sword/Mods/DuneWars Revival/PrivateMaps/Arrakis.py`
+
+     - Before:
+
+       ```python
+       def getGridSize(argsList):
+         # ...
+         WorldSizeTypes.WORLDSIZE_DUEL:       (8,8),
+         WorldSizeTypes.WORLDSIZE_TINY:       (10,10),
+         WorldSizeTypes.WORLDSIZE_SMALL:      (13,13),
+         WorldSizeTypes.WORLDSIZE_STANDARD:   (16,16),
+         WorldSizeTypes.WORLDSIZE_LARGE:      (18,18),
+         WorldSizeTypes.WORLDSIZE_HUGE:       (21,21),
+       ```
+
+     - After:
+
+       ```python
+       def getGridSize(argsList):
+         # ...
+         WorldSizeTypes.WORLDSIZE_DUEL:       (3,3),
+         WorldSizeTypes.WORLDSIZE_TINY:       (4,4),
+         WorldSizeTypes.WORLDSIZE_SMALL:      (5,5),
+         WorldSizeTypes.WORLDSIZE_STANDARD:   (6,6),
+         WorldSizeTypes.WORLDSIZE_LARGE:      (7,7),
+         WorldSizeTypes.WORLDSIZE_HUGE:       (8,8),
+       ```
+
+1. Take the new map sizes into account when starting a game. For example, with the unmodded duel map size you could easily fit 5-6 players in the map, with this duel map size it can only realistically fit 2 players, small can only fit 3 players, etc.
+
+1. When playing the game you may also want to make other adjustments. For example, with an unmodded map size one strategy is to build cities 4 tiles apart to maximise the number of tiles the city can work. With these modded map sizes, you'll probably want to build cities as close together as possible.
 
 ## Mods
 
