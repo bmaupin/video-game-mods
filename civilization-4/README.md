@@ -20,9 +20,11 @@
 
 ## Tips for faster gameplay
 
-#### Read this guide first
+#### In-game tips
 
-[Useful shortcuts and features to improve gameplay speed](https://steamcommunity.com/sharedfiles/filedetails/?id=2313060416)
+- Read this guide first: [Useful shortcuts and features to improve gameplay speed](https://steamcommunity.com/sharedfiles/filedetails/?id=2313060416)
+- While in game, in many places in the UI you can right-click on text to go directly to the Civilopedia entry for that item (e.g. units, technologies, buildings, etc)
+  - This is especially helpful since some screens can't be dismissed without making a choice, like when it's time to choose a new technology to research or a new unit or building for a city's building queue
 
 #### General options
 
