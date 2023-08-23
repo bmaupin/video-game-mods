@@ -97,7 +97,7 @@ These options only apply to one specific game and can only be set before the gam
 
 1. If that doesn't work for a particular map, you may also need to modify `getGridSize` in the map script
 
-   - e.g. for the Dune Wars Arrakis map, `modify Beyond the Sword/Mods/DuneWars Revival/PrivateMaps/Arrakis.py`
+   - e.g. for the Dune Wars Arrakis map, modify `Beyond the Sword/Mods/DuneWars Revival/PrivateMaps/Arrakis.py`
 
      - Before:
 
@@ -125,7 +125,7 @@ These options only apply to one specific game and can only be set before the gam
          WorldSizeTypes.WORLDSIZE_HUGE:       (8,8),
        ```
 
-1. Take the new map sizes into account when starting a game. For example, with the unmodded duel map size you could easily fit 5-6 players in the map, with this duel map size it can only realistically fit 2 players, small can only fit 3 players, etc.
+1. Take the new map sizes into account when starting a game. For example, with the unmodded duel map size you could easily fit 5-6 players in the map, with this duel map size it can only realistically fit 2 players, tiny can only fit 3 players, etc.
 
 1. When playing the game you may also want to make other adjustments. For example, with an unmodded map size one strategy is to build cities 4 tiles apart to maximise the number of tiles the city can work. With these modded map sizes, you'll probably want to build cities as close together as possible.
 
