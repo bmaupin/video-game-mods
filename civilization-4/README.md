@@ -78,6 +78,8 @@ These options only apply to one specific game and can only be set before the gam
 
 1. First, modify the global map sizes
 
+   ⓘ Back up files before changing them to make the changes easier to undo
+
    1. Modify `Assets/XML/GameInfo/CIV4WorldInfo.xml`
 
       - e.g. for Beyond the Sword, modify `Beyond the Sword/Assets/XML/GameInfo/CIV4WorldInfo.xml`
