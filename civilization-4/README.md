@@ -74,6 +74,8 @@ These options only apply to one specific game and can only be set before the gam
 
 #### Modding map sizes
 
+👉 I've create a mod for this along with some other changes here: [https://github.com/bmaupin/quick-civ-4](https://github.com/bmaupin/quick-civ-4)
+
 ⓘ This is a pretty extreme measure, but from my experience, the map size is the single biggest factor when it comes to game length. Without this, even after following all of the above steps, a game with the duel map (the smallest map size) on quick speed can take over 7 hours. That same game can be reduced to 1 hour if the map size is reduced sufficiently.
 
 1. First, modify the global map sizes
