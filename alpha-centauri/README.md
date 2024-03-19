@@ -2,6 +2,10 @@
 
 ⓘ As with most 4X games, games of Alpha Centauri can be very long. These are some notes at attempts to make the game quicker.
 
+## Audio crackling
+
+The audio crackles when playing in Steam with Proton. The fix here seems to work: https://www.gog.com/forum/sid_meier_s_alpha_centauri_/fix_for_static_sound
+
 ## Game options
 
 1. When starting a game, choose _Customize Rules_
