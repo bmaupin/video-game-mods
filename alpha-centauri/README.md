@@ -1,12 +1,22 @@
 # Sid Meier's Alpha Centauri
 
-ⓘ As with most 4X games, games of Alpha Centauri can be very long. These are some notes at attempts to make the game quicker.
-
 ## Audio crackling
 
 The audio crackles when playing in Steam with Proton. The fix here seems to work: https://www.gog.com/forum/sid_meier_s_alpha_centauri_/fix_for_static_sound
 
-## Game options
+## Tips for faster gameplay
+
+ⓘ As with most 4X games, games of Alpha Centauri can be very long. These are some notes at attempts to make the game quicker.
+
+#### Keyboard shortcuts
+
+One of the best way to make the game go quicker is to use keyboard shortcuts.
+
+- Enter: ending the turn, choosing the default selection for most popups
+- Shift-A: automate (formers, etc)
+- /: explore automatically (scouts, etc)
+
+#### Game options
 
 1. When starting a game, choose _Customize Rules_
 
@@ -17,17 +27,36 @@ The audio crackles when playing in Steam with Proton. The fix here seems to work
 
 ## Map sizes
 
+ⓘ One of the most important factors in the length of a 4X game is the size of the map. This has its own section as it's a bit more complicated in Alpha Centauri.
+
+#### Map sizes explained
+
+Alpha Centauri's map sizes are a bit confusing due to the map being rotated by 45°. Map sizes are controlled by two parameters:
+
+- Horizontal
+  - This is the width of the map. The map will appear to be this many tiles wide, but the actual number of tiles in the map will be doubled to account for the map being rotated 45°.
+  - For example, a map with a horizontal value of 16 will appear to be 16 tiles wide at a glance but will actually be 32 tiles wide.
+- Vertical
+  - The height of the map. Unlike horizontal, the vertical value is the actual number of tiles in the map, so the map will appear to be half as high as the vertical value.
+  - For example, a map with a vertical value of 16 will appear to be 8 tiles high at a glance but will actually be 16 tiles high.
+
+Beyond this, tiles appear to be wider than they are taller. So even a map size that is technically square (e.g. 32x16) will appear to be much wider than it is taller.
+
+#### Choose a custom map size without modding
+
+ⓘ This is the easiest way to use a custom map size but you will be limited to a 16x16 map. See below if you wish to create a smaller map.
+
 When starting the game, you can choose a custom map size:
 
 1. At the main menu, choose _Start Game_ > _Make Random Map_ > _Custom Size_
 
-   - The minimum map size appears to be 8x16 (height x width). If anything lower than this is set, an 8x16 map will be created.
-     - TODO: What if only one of the values picked is smaller, e.g. try 10 height x 10 width.
-     - TODO: Is there a way to mod the game or map script to allow smaller sizes?
+1. Set _Horizontal_ and _Vertical_ to a value equal to or greater than 16
+
+   👉 Any value less than 16 will automatically be set to 16. For example, if you try to create a 10x20 map, the game will create a 16x20 map.
 
 #### Default map sizes
 
-(From `alpha.txt` in the game's root directory, under `WORLDSIZE`)
+The default map sizes are quite large (from `alpha.txt` in the game's root directory, under `WORLDSIZE`):
 
 | Description                  | Size   | Total tiles |
 | ---------------------------- | ------ | ----------- |
