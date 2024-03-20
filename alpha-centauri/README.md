@@ -4,6 +4,8 @@
 
 The audio crackles when playing in Steam with Proton. The fix here seems to work: https://www.gog.com/forum/sid_meier_s_alpha_centauri_/fix_for_static_sound
 
+The script has also been added here for purposes of preservation: [sound_fix.sh](sound_fix.sh)
+
 ## Tips for faster gameplay
 
 ⓘ As with most 4X games, games of Alpha Centauri can be very long. These are some notes at attempts to make the game quicker.
