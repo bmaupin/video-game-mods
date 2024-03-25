@@ -24,8 +24,9 @@ One of the best way to make the game go quicker is to use keyboard shortcuts.
 
 1. Use these options for potentially faster gameplay:
 
+   - Enable _One for All_ (Allow cooperative victory, this is enabled by default)
    - Enable _Do or Die_ (Don't restart eliminated players)
-   - TODO: test _Time Warp_
+   - Enable _Time Warp_ (Accelerated start, gives extra units and bases on the first turn)
 
 ## Map sizes
 
@@ -120,7 +121,7 @@ For example, if the largest map coordinate is 31,15, the map is 16x16 (16 horizo
 | 5x20      |               | X           |              |                     |       |
 | 6x18      |               | X (80%)     | X (20%)      | 2                   | 216   |
 | 6x20      |               | X (70%)     | X (30%)      | 2-3                 | 240   |
-| 6x22      |               | X (50%)     | X (50%)      | 2-3                 | 264   |
+| 6x22      |               | X (65%)     | X (35%)      | 2-3                 | 264   |
 | 8x8       | X             |             |              |                     |       |
 | 8x10      | X             |             |              |                     |       |
 | 8x12      | X             |             |              |                     |       |
